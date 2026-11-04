@@ -1132,6 +1132,15 @@
                     });
                 }
                 hideLoader();
+                if (websites.length === 0) {
+                    createDefaultPortals();
+                } else {
+                    renderWebsites();
+                    if (mainModal.classList.contains('active')) {
+                        renderDeleteWebsiteList();
+                        renderEditWebsiteList();
+                    }
+                }
             }, (error) => {
                 hideLoader();
                 console.error(error);
@@ -1431,6 +1440,39 @@
             }
         });
 
+        async function createDefaultPortals() {
+            const defaults = [
+                {
+                    name: 'Meine AOK',
+                    url: 'https://meine.aok.de',
+                    description: 'AOK ჯანმრთელობის დაზღვევის პირადი კაბინეტი და ონლაინ სერვისები.',
+                    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/AOK-Logo.svg/1200px-AOK-Logo.svg.png',
+                    bgColor: '#e6f4ea',
+                    isPortal: true
+                },
+                {
+                    name: 'Meine GGG',
+                    url: 'https://meine-ggg.de',
+                    description: 'Chemnitz GGG საცხოვრებელი ბინის მართვისა და ხელშეკრულებების პორტალი.',
+                    logo: 'https://meine-ggg.de/assets/images/logo.svg',
+                    bgColor: '#fef3c7',
+                    isPortal: true
+                },
+                {
+                    name: 'Deutsche Bank',
+                    url: 'https://meine.deutsche-bank.de',
+                    description: 'ონლაინ ბანკინგი, ფინანსების კონტროლი და საბანკო გადარიცხვები.',
+                    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Deutsche_Bank_logo_without_wordmark.svg/1200px-Deutsche_Bank_logo_without_wordmark.svg.png',
+                    bgColor: '#e0e7ff',
+                    isPortal: true
+                }
+            ];
+
+            const websitesRef = window.ref(window.db, DB_PATH);
+            for (const item of defaults) {
+                await window.push(websitesRef, item);
+            }
+        }
         // ავტორიზაცია
         function showProtectedContent() {
             loginWrapper.style.display = 'none';
