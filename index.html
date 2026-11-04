@@ -3,2725 +3,1519 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShogiDocuments</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>სერვისების პორტალი</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
-    <!-- SheetJS Excel წამკითხველი -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
-    <!-- Mammoth.js Word (.docx) fallback წამკითხველი -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-
-    <!-- docx-preview Word ფაილების ორიგინალთან მიახლოებული რენდერისთვის -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/docx-preview@0.3.3/dist/docx-preview.min.js"></script>
-
-    <!-- Excel-ის PDF ექსპორტისთვის -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-    <!-- PDF.js მინიატურებისა და ძრავისთვის -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script>
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    </script>
-
-    <!-- Supabase JS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #0f172a;
-            --text-muted: #64748b;
+            --bg-body: #f4f7fb;
+            --surface: #ffffff;
             --border: #e2e8f0;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            --radius: 16px;
-        }
-
-        ::-webkit-scrollbar {
-            width: 7px;
-            height: 7px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(241, 245, 249, 0.5);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-            border: 1.5px solid transparent;
-            background-clip: padding-box;
-            transition: background 0.2s ease;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --danger: #ef4444;
+            --success: #10b981;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans Georgian', 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.04) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.04) 0px, transparent 50%);
+            color: var(--text-main);
             min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            padding: 0;
-        }
-
-        .login-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #f1f5f9;
-            padding: 20px;
-        }
-
-        .login-card {
-            background: #ffffff;
-            padding: 48px 40px;
-            border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
-            width: 100%;
-            max-width: 440px;
-            border: 1px solid var(--border);
-        }
-
-        .login-card h2 {
-            margin-bottom: 8px;
-            font-size: 26px;
-            font-weight: 700;
-            text-align: center;
-            color: var(--text);
-        }
-
-        #toastContainer {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 9999;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+        }
+
+        /* 1. ღია ფონი + ხილული Particles.js შესვლის გვერდზე */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #e2e8f0 100%);
+            z-index: 1;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease;
+        }
+
+        #particles-js.hidden {
+            opacity: 0;
+            visibility: hidden;
             pointer-events: none;
         }
 
-        .toast {
-            background: #0f172a;
-            color: #fff;
-            padding: 14px 20px;
-            border-radius: 12px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            pointer-events: auto;
-            border-left: 4px solid #ef4444;
-            max-width: 350px;
-        }
-
-        .toast.success {
-            border-left-color: #10b981;
-        }
-
-        @keyframes slideInRight {
-            from { transform: translateX(120%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideOutRight {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(120%); opacity: 0; }
-        }
-
-        .spinner-container {
-            display: flex;
+        /* 2. Loading Circle (Spinner Overlay & Inline) */
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 500;
-            height: 100%;
-            width: 100%;
+            gap: 14px;
+            z-index: 5000;
+        }
+
+        .loading-overlay.active {
+            display: flex;
         }
 
         .spinner {
             width: 44px;
             height: 44px;
-            border: 4px solid var(--border);
-            border-top: 4px solid var(--primary);
+            border: 3.5px solid rgba(37, 99, 235, 0.15);
+            border-top-color: var(--accent);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 0.75s linear infinite;
+        }
+
+        .spinner-sm {
+            width: 22px;
+            height: 22px;
+            border: 2.5px solid rgba(37, 99, 235, 0.2);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+            display: none;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
 
-        header {
+        .loading-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .app-container {
             width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 28px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ჰედერი */
+        header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 22px;
+            padding: 16px 28px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 30px;
-            border-bottom: 2px solid var(--border);
-            margin-bottom: 30px;
-            background: transparent;
+            box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.06);
+            margin-bottom: 36px;
+            position: sticky;
+            top: 16px;
+            z-index: 100;
         }
 
-        .header-title {
+        .header-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             cursor: pointer;
             user-select: none;
-            transition: opacity 0.2s;
-        }
-        .header-title:hover {
-            opacity: 0.85;
-        }
-
-        .header-title svg {
-            width: 32px;
-            height: 32px;
-            fill: var(--primary);
+            padding: 6px 10px;
+            margin-left: -10px;
+            border-radius: 14px;
+            transition: var(--transition);
         }
 
-        .header-title h1 {
-            font-size: 24px;
+        .header-brand:hover {
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .header-brand:active {
+            transform: scale(0.98);
+        }
+
+        /* 7. შეცვლილი სერვისების პორტალის SVG */
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+            background: linear-gradient(135deg, var(--accent), #4f46e5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 16px -4px rgba(37, 99, 235, 0.4);
+            transition: transform 0.5s ease;
+        }
+
+        .brand-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: white;
+        }
+
+        .header-brand.refreshing .brand-icon {
+            transform: rotate(360deg);
+        }
+
+        .header-brand h1 {
+            font-size: 1.3rem;
             font-weight: 700;
-            color: var(--text);
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+
+        .header-brand p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
         }
 
         .header-actions {
             display: flex;
-            gap: 14px;
             align-items: center;
-        }
-
-        .search-box-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-box-wrapper svg {
-            position: absolute;
-            left: 16px;
-            width: 18px;
-            height: 18px;
-            fill: var(--text-muted);
-            pointer-events: none;
-        }
-
-        .search-input {
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 14px;
-            background: #ffffff;
-            transition: all 0.2s;
-        }
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-        }
-
-        .header-search-input {
-            padding: 10px 16px 10px 35px !important;
-            width: 280px;
-        }
-
-        .app-body-content {
-            padding: 0 30px 40px 30px;
+            gap: 10px;
         }
 
         .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
             padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
+            border-radius: var(--radius-md);
+            border: none;
             font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: var(--transition);
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+            justify-content: center;
+            user-select: none;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-hover); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25); }
+        .btn-outline { background: white; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-outline:hover { background: #f8fafc; border-color: #cbd5e1; }
+        .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .btn-danger:hover { background: var(--danger); color: white; }
+        .btn-panel { background: #0f172a; color: white; }
+        .btn-panel:hover { background: #1e293b; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2); }
+
+        /* შესვლის ფანჯარა */
+        .login-wrapper {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            pointer-events: none;
         }
 
-        .btn:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-1px);
+        .login-card {
+            pointer-events: auto;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            padding: 44px 38px;
+            border-radius: 28px;
+            box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.12), 0 0 1px 1px rgba(15, 23, 42, 0.03);
+            width: 92%;
+            max-width: 400px;
+            text-align: center;
+            animation: cardAppear 0.4s ease-out;
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
-            box-shadow: none;
-        }
-        .btn-outline:hover {
-            background: #f1f5f9;
-            transform: none;
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .btn-danger {
-            background-color: #fee2e2;
-            color: #dc2626;
-            border: 1px solid #fca5a5;
-            box-shadow: none;
-        }
-        .btn-danger:hover {
-            background-color: #fecaca;
-            color: #b91c1c;
+        .fingerprint-clean {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            color: var(--accent);
         }
 
-        .btn-solid-danger {
-            background-color: #ef4444;
-            color: white;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
-        }
-        .btn-solid-danger:hover {
-            background-color: #dc2626;
+        .fingerprint-clean svg {
+            width: 58px;
+            height: 58px;
+            stroke: var(--accent);
+            filter: drop-shadow(0 4px 10px rgba(37, 99, 235, 0.2));
         }
 
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 13px;
-            color: var(--text);
-        }
-
-        input[type="text"], input[type="password"], input[type="file"], input[type="number"] {
+        .input-group { position: relative; margin-bottom: 14px; }
+        .input-group i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .modern-input {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: inherit;
-            color: var(--text);
-            background: #ffffff;
-            transition: all 0.2s ease;
+            padding: 13px 16px 13px 44px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            background: #fff;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: var(--transition);
         }
-
-        input:focus {
+        .modern-input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+        .modern-input.no-icon { padding-left: 14px; }
+
+        /* ბარათები: 1/3 ლოგო + ავტომატური ფერი, 2/3 სახელი და აღწერა */
+        .protected-content { display: none; }
+        .websites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 26px;
+            padding-bottom: 50px;
+            transition: opacity 0.25s ease;
         }
 
-        input[type="file"] {
-            padding: 10px;
+        .portal-card {
+            background: var(--surface);
+            border-radius: 22px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 4px 10px -4px rgba(15, 23, 42, 0.02);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            height: 270px;
+            overflow: hidden;
             cursor: pointer;
-            background: #f8fafc;
+            transition: var(--transition);
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        .custom-dropdown-container {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-top: 4px;
-            max-height: 160px;
-            overflow-y: auto;
-            z-index: 100;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            display: none;
+        .portal-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 22px 40px -12px rgba(15, 23, 42, 0.12);
+            border-color: #cbd5e1;
         }
 
-        .custom-dropdown-item {
-            padding: 10px 16px;
-            font-size: 14px;
-            color: var(--text);
-            cursor: pointer;
-            transition: background 0.15s;
-        }
-        .custom-dropdown-item:hover {
-            background: #f1f5f9;
+        .card-top-third {
+            height: 36%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 24px;
+            position: relative;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            transition: background 0.3s ease;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        .location-section {
-            margin-top: 35px;
+        /* 6. ლოგოს ფოტო არ ინიშნება და არ გადაადგილდება */
+        .card-logo-img {
+            max-height: 54px;
+            max-width: 75%;
+            object-fit: contain;
+            z-index: 2;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.06));
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-drag: none;
+            pointer-events: none;
         }
 
-        .location-header {
+        .portal-card:hover .card-logo-img {
+            transform: scale(1.09);
+        }
+
+        .card-bottom-twothirds {
+            height: 64%;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: var(--surface);
+        }
+
+        .card-title-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            user-select: none;
-        }
-
-        .location-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text);
-            display: flex;
-            align-items: center;
             gap: 10px;
+            margin-bottom: 8px;
         }
 
-        .file-count {
-            background: #e0e7ff;
-            color: var(--primary);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 3px 10px;
-            border-radius: 20px;
-        }
-
-        .mobile-category-arrow {
-            display: none;
-            width: 18px;
-            height: 18px;
-            fill: var(--text-muted);
-            transition: transform 0.25s ease;
-        }
-        .mobile-category-arrow.open {
-            transform: rotate(180deg);
-        }
-
-        .file-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
-        }
-
-        .file-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-            display: flex;
-            flex-direction: column;
-        }
-        .file-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px -6px rgba(0,0,0,0.08);
-            border-color: var(--primary);
-        }
-
-        .file-card-preview {
-            width: 100%;
-            height: 150px;
-            background: #f1f5f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .file-card-preview img, .file-card-preview canvas {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .file-card-preview-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .excel-preview-wrapper {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: #ffffff;
-            padding: 8px;
-        }
-        .preview-mini-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 10px;
-        }
-        .preview-mini-table td {
-            border: 1px solid #94a3b8;
-            padding: 3px 4px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: #475569;
-        }
-
-        .file-card-footer {
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: white;
-        }
-
-        .file-icon-box {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .file-icon-box.image { background: #dbeafe; fill: #2563eb; }
-        .file-icon-box.pdf { background: #fee2e2; fill: #dc2626; }
-        .file-icon-box.excel { background: #d1fae5; fill: #059669; }
-        .file-icon-box.word { background: #e0f2fe; fill: #0284c7; }
-        .file-icon-box.default { background: #f3f4f6; fill: #4b5563; }
-
-        .file-icon-box svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .file-info {
-            overflow: hidden;
-            flex: 1;
-        }
-
-        .file-title {
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--text);
+        .card-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin-bottom: 2px;
         }
 
-        .file-type-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .upload-preview-container {
-            margin-top: 10px;
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
+        .card-go-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
             background: #f8fafc;
-            max-height: 130px;
-            min-height: 90px;
+            color: #94a3b8;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            transition: var(--transition);
         }
 
-        .upload-preview-container img {
-            max-width: 100%;
-            max-height: 110px;
-            border-radius: 8px;
-            object-fit: contain;
+        .portal-card:hover .card-go-icon {
+            background: var(--accent);
+            color: white;
+            transform: translateX(3px);
         }
 
-        .preview-placeholder {
+        .card-description {
+            font-size: 0.87rem;
             color: var(--text-muted);
-            font-size: 13px;
+            line-height: 1.55;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
         }
 
-        .modal {
-            display: none;
+        .card-domain-tag {
+            font-size: 0.74rem;
+            color: #94a3b8;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        /* მოდალი - 0.5 სმ ყველა კიდიდან */
+        .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(6px);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
         }
+        .modal-overlay.active { opacity: 1; }
 
-        .modal-content.file-view-modal {
-            width: calc(100vw - 2cm);
-            height: calc(100vh - 2cm);
-            max-width: none;
-            max-height: none;
-            border-radius: 20px;
+        #mainModal { z-index: 2000; }
+        #confirmationModal, #editDescModal { z-index: 2100; }
+
+        #mainModal .modal-content {
+            position: fixed;
+            top: 0.5cm;
+            bottom: 0.5cm;
+            left: 0.5cm;
+            right: 0.5cm;
+            width: calc(100vw - 1cm);
+            height: calc(100vh - 1cm);
+            border-radius: 18px;
+            padding: 24px 28px;
+            background: var(--surface);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background: white;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .modal-content.upload-modal {
-            background: white;
-            width: 95vw;
-            max-width: 650px;
-            height: auto;
-            max-height: 90vh;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .modal-content.confirm-modal {
-            background: white;
-            width: 90vw;
-            max-width: 400px;
-            height: auto;
-            border-radius: 20px;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            animation: modalIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.96); }
-            to { opacity: 1; transform: scale(1); }
         }
 
         .modal-header {
-            padding: 20px 28px;
-            background: #ffffff;
-            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 16px;
+            flex-shrink: 0;
         }
-
-        .modal-header h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .close-btn {
+        .modal-header h2 { font-size: 1.3rem; color: var(--text-main); }
+        .close-modal {
             background: #f1f5f9;
-            border: none;
-            color: var(--text-muted);
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
         }
-        .close-btn:hover {
-            background: #e2e8f0;
-            color: var(--text);
-        }
+        .close-modal:hover { background: #fee2e2; color: var(--danger); }
 
-        .modal-body {
+        .modal-tabs {
+            display: flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            flex-shrink: 0;
+        }
+        .modal-tab {
             flex: 1;
-            padding: 20px;
+            padding: 10px 0;
+            border: none;
+            background: transparent;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        .modal-tab.active { color: var(--text-main); background: var(--surface); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+
+        .tab-content { display: none; flex-direction: column; flex: 1; min-height: 0; }
+        .tab-content.active { display: flex; }
+
+        #addWebsiteForm {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 8px;
             display: flex;
             flex-direction: column;
+            gap: 16px;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-label { display: block; margin-bottom: 6px; font-weight: 600; color: #334155; font-size: 0.85rem; }
+
+        .logo-box {
+            display: flex;
             align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border: 1.5px dashed var(--border);
+            border-radius: var(--radius-md);
             background: #f8fafc;
-            overflow: auto;
+        }
+        .logo-preview-square {
+            width: 96px;
+            height: 76px;
+            background: #eef2ff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+            padding: 10px;
+            transition: background 0.35s ease;
             position: relative;
         }
-        .modal-body.upload-body {
-            padding: 30px;
-            flex-direction: column;
-            align-items: stretch;
-            overflow-y: auto;
-        }
-        .modal-body img, .modal-body canvas {
+        .logo-preview-square img {
             max-width: 100%;
-            height: auto;
-            border: none;
+            max-height: 100%;
             object-fit: contain;
-            background: white;
-            transition: transform 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border-radius: 8px;
+            user-select: none;
+            -webkit-user-drag: none;
+            pointer-events: none;
         }
 
-        .modal-footer-toolbar {
-            padding: 12px 24px;
-            background: #ffffff;
-            border-top: 1px solid var(--border);
+        .action-list { flex: 1; overflow-y: auto; padding-right: 6px; }
+        .action-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 15px;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            background: var(--surface);
+        }
+        .action-item-info { display: flex; align-items: center; gap: 12px; }
+        .action-logo-img {
+            width: 48px;
+            height: 38px;
+            border-radius: 8px;
+            object-fit: contain;
+            padding: 4px;
+            border: 1px solid #f1f5f9;
+            user-select: none;
+            -webkit-user-drag: none;
+            pointer-events: none;
+        }
+        .action-text h4 { font-size: 0.92rem; }
+        .action-text p { font-size: 0.78rem; color: var(--text-muted); max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .modal-content-sm {
+            background: var(--surface);
+            border-radius: 18px;
+            padding: 28px;
+            width: 92%;
+            max-width: 440px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
         }
 
-        .toolbar-group {
+        /* Toast */
+        .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+        .toast {
+            background: var(--surface);
+            border-left: 4px solid var(--danger);
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 500;
+            transform: translateX(120%);
+            transition: transform 0.25s ease;
+            font-size: 0.88rem;
         }
+        .toast.show { transform: translateX(0); }
+        .toast.success { border-left-color: var(--success); }
+        .toast.success i { color: var(--success); }
+        .toast:not(.success) i { color: var(--danger); }
 
-        .toolbar-btn {
-            background: #f1f5f9;
-            border: 1px solid var(--border);
-            color: var(--text);
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-        .toolbar-btn:hover {
-            background: #e2e8f0;
-        }
-        .toolbar-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: var(--text);
-        }
-
-        .page-jump-group {
-            display: none;
-            gap: 8px;
-        }
-        .page-jump-input {
-            width: 74px !important;
-            height: 32px;
-            padding: 5px 9px !important;
-            border-radius: 8px !important;
-            font-size: 13px !important;
-            text-align: center;
-        }
-
-        .download-menu-wrapper {
-            position: relative;
-            display: flex;
-        }
-
-        .download-options-menu {
-            position: absolute;
-            right: 0;
-            bottom: calc(100% + 8px);
-            min-width: 180px;
-            padding: 6px;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.16);
-            display: none;
-            z-index: 50;
-        }
-        .download-options-menu.show {
-            display: block;
-        }
-
-        .download-option-btn {
-            width: 100%;
-            border: 0;
-            background: transparent;
-            color: var(--text);
-            border-radius: 8px;
-            padding: 9px 10px;
-            text-align: left;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            font-family: inherit;
-        }
-        .download-option-btn:hover {
-            background: #f1f5f9;
-        }
-
-        .modal-body.pdf-mode,
-        .modal-body.excel-mode {
-            padding: 0;
-            align-items: stretch;
-        }
-        .modal-body.word-mode {
-            align-items: stretch;
-        }
-
-        .pdf-viewer {
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background: #e5e7eb;
-            padding: 24px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 18px;
-            user-select: text;
-        }
-
-        .pdf-page-shell {
-            position: relative;
-            width: min(calc(100% - 48px), 860px);
-            aspect-ratio: 0.707;
-            background: #ffffff;
-            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.18);
-            overflow: hidden;
-            line-height: 1;
-            flex: 0 0 auto;
-            margin: 0 auto;
-        }
-        .pdf-page-shell canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-            max-width: none;
-            border: 0;
-            border-radius: 0;
-            box-shadow: none;
-            background: #ffffff;
-            pointer-events: none;
-            user-select: none;
-        }
-        .pdf-page-loading {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 13px;
-            background: #ffffff;
-        }
-
-        .pdf-text-layer {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            line-height: 1;
-            text-align: initial;
-            user-select: text;
-            transform-origin: 0 0;
-        }
-        .pdf-text-layer span,
-        .pdf-text-layer br {
-            color: transparent;
-            position: absolute;
-            white-space: pre;
-            cursor: text;
-            transform-origin: 0% 0%;
-            user-select: text;
-        }
-        .pdf-text-layer ::selection {
-            background: rgba(99, 102, 241, 0.35);
-        }
-
-        .word-viewer-shell {
-            width: 100%;
-            min-height: 100%;
-            display: flex;
-            justify-content: center;
-            padding: 24px 12px;
-        }
-        .word-render-container {
-            transform-origin: top center;
-            transition: transform 0.2s ease;
-        }
-        .word-render-container .docx-wrapper {
-            background: transparent !important;
-            padding: 0 !important;
-        }
-        .word-render-container section.docx {
-            margin: 0 auto 22px auto !important;
-            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.12);
-        }
-
-        .excel-table-container {
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background: #ffffff;
-            padding: 0;
-            margin: 0;
-            position: relative;
-        }
-
-        table.excel-rendered {
-            width: max-content;
-            min-width: 100%;
-            border-collapse: separate !important;
-            border-spacing: 0;
-            font-size: 13px;
-            background-color: #ffffff;
-        }
-        table.excel-rendered th, table.excel-rendered td {
-            border: 1px solid #cbd5e1 !important;
-            border-width: 0 1px 1px 0 !important;
-            padding: 8px 12px;
-            text-align: left;
-            background-color: #ffffff;
-            white-space: nowrap;
-        }
-        table.excel-rendered thead th {
-            border-top-width: 1px !important;
-        }
-        table.excel-rendered th:first-child,
-        .excel-rendered td:first-child {
-            border-left-width: 1px !important;
-        }
-        table.excel-rendered th {
-            background-color: #f1f5f9 !important;
-            font-weight: 600;
-            color: #0f172a;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 30;
-            background-clip: padding-box;
-        }
-        table.excel-rendered td.excel-row-header {
-            background-color: #f1f5f9 !important;
-            color: #64748b;
-            font-weight: 600;
-            text-align: center;
-            width: 50px;
-            min-width: 50px;
-            position: sticky;
-            left: 0;
-            z-index: 25;
-            background-clip: padding-box;
-        }
-        table.excel-rendered th.excel-corner-cell {
-            background-color: #e2e8f0 !important;
-            width: 50px;
-            min-width: 50px;
-            position: sticky;
-            left: 0;
-            top: 0;
-            z-index: 40;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px;
-            color: var(--text-muted);
-            font-size: 15px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-        
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                align-items: stretch;
-                padding: 15px 20px;
-                gap: 15px;
-            }
-            .header-actions {
-                display: flex;
-                flex-wrap: wrap;
-                width: 100%;
-                gap: 10px;
-            }
-            .search-box-wrapper {
-                flex: 1 1 100%;
-                width: 100%;
-            }
-            .header-search-input {
-                width: 100% !important;
-            }
-            .header-actions > .btn {
-                flex: 1;
-                justify-content: center;
-            }
-            .app-body-content {
-                padding: 0 15px 30px 15px;
-            }
-            .mobile-category-arrow {
-                display: block;
-            }
-            .location-header {
-                cursor: pointer;
-            }
-            .file-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 12px;
-            }
-            .file-card-preview {
-                height: 110px;
-            }
-            .file-card-footer {
-                padding: 10px;
-                gap: 8px;
-            }
-            .file-icon-box {
-                width: 30px;
-                height: 30px;
-            }
-            .file-icon-box svg {
-                width: 16px;
-                height: 16px;
-            }
-            .file-title {
-                font-size: 13px;
-            }
-            .file-type-label {
-                font-size: 10px;
-            }
-            .modal {
-                padding: 0;
-            }
-            .modal-content.file-view-modal,
-            .modal-content.upload-modal {
-                width: 100vw !important;
-                height: 100vh !important;
-                max-width: 100%;
-                max-height: 100%;
-                border-radius: 0;
-            }
-            .modal-header {
-                padding: 15px;
-            }
-            .modal-body {
-                padding: 15px;
-            }
-            .modal-footer-toolbar {
-                flex-wrap: wrap;
-                gap: 10px;
-                padding: 12px 15px;
-            }
+            .form-row { grid-template-columns: 1fr; }
+            header { flex-direction: column; gap: 12px; text-align: center; }
+            .header-brand { margin-left: 0; justify-content: center; }
+            .logo-box { flex-direction: column; align-items: stretch; }
+            .logo-preview-square { width: 100%; }
         }
     </style>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, push, remove, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyA36t5PGnSCvMwW9oUDQmJC1fE8bdGxD1Q",
+            authDomain: "alex-98741.firebaseapp.com",
+            projectId: "alex-98741",
+            storageBucket: "alex-98741.firebasestorage.app",
+            messagingSenderId: "200712870305",
+            appId: "1:200712870305:web:3b1dd25683effbda49d3e0",
+            measurementId: "G-XC0LYY9H22"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        
+        window.db = database;
+        window.ref = ref;
+        window.onValue = onValue;
+        window.push = push;
+        window.remove = remove;
+        window.set = set;
+    </script>
 </head>
 <body>
 
-    <div id="toastContainer"></div>
+    <!-- 1. ღია ფონი + Particles.js -->
+    <div id="particles-js"></div>
 
-    <div id="loginView" class="login-wrapper">
-        <div class="login-card" style="text-align: center;">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 24px;">
-                <div style="width: 52px; height: 52px; background: #e0e7ff; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
-                    <svg viewBox="0 0 24 24" style="width: 26px; height: 26px; fill: var(--primary);">
-                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
-                    </svg>
+    <!-- 2. Loading Circle Overlay -->
+    <div class="loading-overlay" id="globalLoader">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loaderText">იტვირთება...</div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- წაშლის დადასტურება -->
+    <div class="modal-overlay" id="confirmationModal">
+        <div class="modal-content-sm" style="text-align: center;">
+            <div style="width: 50px; height: 50px; border-radius: 50%; background: #fee2e2; color: var(--danger); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 1.3rem;">
+                <i class="fas fa-trash-alt"></i>
+            </div>
+            <h3 style="margin-bottom: 6px;">დადასტურება</h3>
+            <p id="confirmationMessage" style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">ნამდვილად გსურთ წაშლა?</p>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-outline" id="cancelConfirmBtn" style="flex: 1;">გაუქმება</button>
+                <button class="btn btn-danger" id="confirmBtn" style="flex: 1; background: var(--danger); color: white;">წაშლა</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- რედაქტირების მოდალი -->
+    <div class="modal-overlay" id="editDescModal">
+        <div class="modal-content-sm">
+            <div class="modal-header">
+                <h2>პორტალის რედაქტირება</h2>
+                <button class="close-modal" onclick="closeEditDescModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div class="form-group">
+                    <label class="form-label">სახელი</label>
+                    <input type="text" id="editNameInput" class="modern-input no-icon">
                 </div>
-                <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: var(--text-muted);">
-                    <path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/>
-                </svg>
-                <div style="width: 52px; height: 52px; background: #f1f5f9; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
-                    <svg viewBox="0 0 24 24" style="width: 26px; height: 26px; fill: var(--primary);">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
+                <div class="form-group">
+                    <label class="form-label">ბმული (URL)</label>
+                    <input type="text" id="editUrlInput" class="modern-input no-icon">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">ლოგოს ბმული</label>
+                    <input type="text" id="editLogoInput" class="modern-input no-icon">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">აღწერა</label>
+                    <textarea id="editDescriptionInput" class="modern-input no-icon" rows="2"></textarea>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <button class="btn btn-outline" onclick="closeEditDescModal()" style="flex: 1;">გაუქმება</button>
+                    <button class="btn btn-primary" id="saveEditDescBtn" style="flex: 1;">შენახვა</button>
                 </div>
             </div>
-            <h2>ShogiDocuments</h2>
-            <div class="form-group">
-                <input type="text" id="usernameInput" placeholder="შეიყვანეთ სახელი და გვარი">
+        </div>
+    </div>
+
+    <!-- მთავარი მართვის მოდალი (0.5 სმ დაშორებით) -->
+    <div class="modal-overlay" id="mainModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-sliders-h" style="color: var(--accent); margin-right: 8px;"></i> პორტალების მართვა</h2>
+                <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
             </div>
-            <div class="form-group">
-                <input type="password" id="passwordInput" placeholder="შეიყვანეთ პაროლი">
+
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-tab="add-tab"><i class="fas fa-plus"></i> ახალი პორტალი</button>
+                <button class="modal-tab" data-tab="delete-tab"><i class="fas fa-trash-alt"></i> წაშლა</button>
+                <button class="modal-tab" data-tab="edit-tab"><i class="fas fa-pen"></i> რედაქტირება</button>
             </div>
-            <button class="btn" style="width: 100%; justify-content: center; margin-top: 10px;" onclick="handleLogin()">შესვლა</button>
+
+            <!-- დამატება (შაბლონების გარეშე, ავტომატური ფერით და სავალდებულო ლოგოთი) -->
+            <div class="tab-content active" id="add-tab">
+                <form id="addWebsiteForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">ორგანიზაცია</label>
+                            <div class="input-group" style="margin-bottom:0;">
+                                <i class="fas fa-building"></i>
+                                <input type="text" id="websiteName" class="modern-input" required placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ბმული</label>
+                            <div class="input-group" style="margin-bottom:0;">
+                                <i class="fas fa-link"></i>
+                                <input type="text" id="websiteUrl" class="modern-input" required placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ლოგო (სავალდებულო) და მისი ავტომატური ფონი -->
+                    <div class="form-group">
+                        <label class="form-label">ლოგო<span style="font-weight: 400; color: var(--text-muted); font-size: 0.78rem;"></span></label>
+                        <div class="logo-box">
+                            <div class="logo-preview-square" id="logoPreviewBox">
+                                <div class="spinner-sm" id="logoSpinner"></div>
+                                <img id="logoPreviewImg" src="" alt="Logo" style="display: none;">
+                                <i id="logoPreviewPlaceholder" class="fas fa-image" style="color: #94a3b8; font-size: 1.5rem;"></i>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+                                <div class="input-group" style="margin-bottom: 0;">
+                                    <i class="fas fa-image"></i>
+                                    <input type="text" id="logoUrlInput" class="modern-input" placeholder="">
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                                    <button type="button" class="btn btn-outline" id="autoFetchLogoBtn" style="font-size: 0.8rem; padding: 7px 12px;">
+                                        <i class="fas fa-magic"></i> URL-დან ლოგოს ამოღება
+                                    </button>
+                                    <button type="button" class="btn btn-outline" id="googleSearchLogoBtn" style="font-size: 0.8rem; padding: 7px 12px;">
+                                        <i class="fab fa-google"></i> Google-ში ლოგოს ძებნა
+                                    </button>
+                                    <label class="btn btn-outline" style="font-size: 0.8rem; padding: 7px 12px; cursor: pointer; margin: 0;">
+                                        <i class="fas fa-upload"></i> ფაილის ატვირთვა
+                                        <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">აღწერა</label>
+                        <textarea id="websiteDescription" class="modern-input no-icon" rows="3" placeholder=""></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="padding: 13px; margin-top: auto;">
+                        <i class="fas fa-save"></i> დამატება
+                    </button>
+                </form>
+            </div>
+
+            <!-- წაშლა -->
+            <div class="tab-content" id="delete-tab">
+                <div class="action-list" id="deleteWebsiteList"></div>
+            </div>
+
+            <!-- რედაქტირება -->
+            <div class="tab-content" id="edit-tab">
+                <div class="action-list" id="editWebsiteList"></div>
+            </div>
         </div>
     </div>
 
     <!-- მთავარი აპლიკაცია -->
-    <div id="appView" class="container hidden">
-        <header>
-            <div class="header-title" onclick="refreshData()" title="მონაცემების განახლება">
-                <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+    <div class="app-container">
+        <!-- ჰედერი -->
+        <header id="mainHeader" style="display: none;">
+            <div class="header-brand" id="refreshBrandBtn" title="განახლება">
+                <!-- 7. ახალი სერვისების პორტალის ვექტორული SVG -->
+                <div class="brand-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                    </svg>
+                </div>
                 <div>
-                    <h1>ShogiDocuments</h1>
+                    <h1>სერვისების პორტალი</h1>
                 </div>
             </div>
+            
             <div class="header-actions">
-                <div class="search-box-wrapper">
-                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                    <input type="text" id="searchInput" class="search-input header-search-input" placeholder="ძებნა..." oninput="handleSearch(event)">
-                </div>
-                <button class="btn" onclick="openUploadModal()">
-                    <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                    დამატება
+                <button class="btn btn-panel" id="openPanelBtn">
+                    <i class="fas fa-sliders-h"></i> მართვა
                 </button>
-                <button class="btn btn-danger" onclick="handleLogout()">გასვლა</button>
+                <button class="btn btn-outline" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> გასვლა
+                </button>
             </div>
         </header>
 
-        <div class="app-body-content">
-            <div id="locationsContainer">
-                <div class="spinner-container" style="padding: 60px;">
-                    <div class="spinner"></div>
-                    <span>იტვირთება...</span>
+        <!-- შესვლის ფორმა -->
+        <div class="login-wrapper" id="loginWrapper">
+            <div class="login-card">
+                <div class="fingerprint-clean">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33" />
+                    </svg>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ატვირთვის Modal -->
-    <div class="modal" id="uploadModal">
-        <div class="modal-content upload-modal">
-            <div class="modal-header">
-                <h3>ფაილის ატვირთვა</h3>
-                <button class="close-btn" onclick="closeUploadModal()">
-                    <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                </button>
-            </div>
-            <div class="modal-body upload-body" id="uploadModalBody">
-                <div class="form-group">
-                    <label for="fileTitle">სათაური</label>
-                    <input type="text" id="fileTitle" placeholder="მიუთითეთ ფაილის სათაური">
-                </div>
-                <div class="form-group">
-                    <label for="fileLocation">კატეგორია</label>
-                    <div style="position: relative; display: flex; align-items: center;">
-                        <input type="text" id="fileLocation" placeholder="აირჩიეთ არსებული ან აკრიფეთ ახალი კატეგორია" autocomplete="off" style="background: #ffffff; padding-right: 40px;" onfocus="openCategoryDropdown()" oninput="filterCategoryDropdown(event)">
-                        <svg viewBox="0 0 24 24" onclick="toggleCategoryDropdown(event)" style="position: absolute; right: 12px; width: 18px; height: 18px; fill: var(--text-muted); cursor: pointer;"><path d="M7 10l5 5 5-5z"/></svg>
+                <h2 style="font-size: 1.5rem; margin-bottom: 6px; font-weight: 700; color: var(--text-main);">ავტორიზაცია</h2>
+                <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 0.86rem;"></p>
+                
+                <form id="standaloneAuthForm" onsubmit="event.preventDefault();">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" class="modern-input" placeholder="მომხმარებელი" value="alex">
                     </div>
-                    <div id="customCategoryDropdown" class="custom-dropdown-container"></div>
-                </div>
-                <div class="form-group">
-                    <label for="fileInput">აირჩიეთ ფაილი</label>
-                    <input type="file" id="fileInput" onchange="previewFile(event)">
-                </div>
-                <div class="form-group">
-                    <label>Preview</label>
-                    <div class="upload-preview-container" id="uploadPreview">
-                        <span class="preview-placeholder">ფაილი არ არის არჩეული</span>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" class="modern-input" placeholder="პაროლი">
                     </div>
-                </div>
-
-                <div id="uploadProgressContainer" class="form-group hidden" style="margin-top: 15px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; font-weight: 600; color: var(--text);">
-                        <span>ატვირთვის პროცესი:</span>
-                        <span id="uploadPercent">0%</span>
-                    </div>
-                    <div style="width: 100%; background-color: #e2e8f0; height: 10px; border-radius: 20px; overflow: hidden;">
-                        <div id="uploadProgressBar" style="width: 0%; height: 100%; background-color: var(--primary); transition: width 0.2s ease;"></div>
-                    </div>
-                </div>
-
-                <button class="btn" id="uploadBtn" style="width: 100%; justify-content: center; margin-top: 10px;" onclick="uploadFile()">ატვირთვა</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ფაილის სანახავი Modal -->
-    <div class="modal" id="fileModal">
-        <div class="modal-content file-view-modal">
-            <div class="modal-header">
-                <h3 id="modalTitle">ფაილი</h3>
-                <div id="excelSearchContainer" style="display: none; align-items: center;">
-                    <input type="text" id="excelSearchInput" class="search-input" placeholder="ძებნა ცხრილში..." oninput="handleExcelSearch(event)" style="width: 200px; padding: 6px 12px; font-size: 13px;">
-                </div>
-                <button class="close-btn" onclick="closeModal()">
-                    <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                </button>
-            </div>
-            <div class="modal-body" id="modalBody"></div>
-            <div class="modal-footer-toolbar">
-                <div class="toolbar-group" id="generalPageInfoGroup">
-                    <span id="pageInfo">დოკუმენტი</span>
-                </div>
-                <div class="toolbar-group page-jump-group" id="pageJumpGroup">
-                    <span>გვერდი</span>
-                    <input type="number" id="pageJumpInput" class="page-jump-input" min="1" value="1" onchange="jumpToPageFromInput()" onkeydown="handlePageJumpKey(event)">
-                    <span id="pageTotalLabel">/ 1</span>
-                </div>
-                <div class="toolbar-group" id="zoomGroup">
-                    <button class="toolbar-btn" onclick="zoomFile(-0.1)" title="დაპატარავება">
-                        <svg viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>
+                    <button type="submit" class="btn btn-primary" id="loginBtn" style="width: 100%; padding: 13px; margin-top: 4px;">
+                        შესვლა <i class="fas fa-arrow-right"></i>
                     </button>
-                    <span id="zoomLabel" style="width: 45px; text-align: center;">100%</span>
-                    <button class="toolbar-btn" onclick="zoomFile(0.1)" title="გადიდება">
-                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                    </button>
-                </div>
-                <div class="toolbar-group" style="gap: 8px;">
-                    <button class="toolbar-btn" onclick="printCurrentFile()" title="ბეჭდვა" style="width: 38px; height: 38px;">
-                        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
-                    </button>
-                    <div class="download-menu-wrapper" id="downloadMenuWrapper">
-                        <button class="toolbar-btn" onclick="downloadCurrentFile(event)" title="გადმოწერა" style="width: 38px; height: 38px;">
-                            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                        </button>
-                        <div class="download-options-menu" id="downloadOptionsMenu">
-                            <button class="download-option-btn" onclick="downloadExcelAsPdf()">გადმოწერა PDF</button>
-                            <button class="download-option-btn" onclick="downloadExcelAsWorkbook()">გადმოწერა Excel</button>
-                            <button class="download-option-btn" onclick="downloadExcelAsCsv()">გადმოწერა CSV</button>
-                        </div>
-                    </div>
-                    <button class="toolbar-btn" onclick="confirmDeleteFile()" title="წაშლა" style="width: 38px; height: 38px; background: #fee2e2; border-color: #fca5a5;">
-                        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: #dc2626;"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                    </button>
-                </div>
+                </form>
             </div>
         </div>
+
+        <!-- ბარათების გრიდი -->
+        <main class="protected-content" id="protectedContent">
+            <div class="websites-grid" id="websitesGrid"></div>
+        </main>
     </div>
 
-    <!-- წაშლის დასტურის Modal -->
-    <div class="modal" id="deleteConfirmModal">
-        <div class="modal-content confirm-modal">
-            <h3 style="font-size: 18px; color: var(--text);">წაშლა</h3>
-            <p id="deleteConfirmText" style="color: var(--text-muted); font-size: 14px;">ნამდვილად გსურთ ფაილის წაშლა?</p>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
-                <button class="btn btn-outline" onclick="closeDeleteConfirm()" style="flex: 1; justify-content: center;">გაუქმება</button>
-                <button class="btn btn-solid-danger" onclick="executeDeleteFile()" style="flex: 1; justify-content: center;">წაშლა</button>
-            </div>
-        </div>
-    </div>
+    <script>
+        const correctUsername = 'alex';
+        const correctPassword = '2911';
+        const DB_PATH = 'websites';
 
-    <!-- ახალი მოწყობილობიდან შესვლის დადასტურება -->
-    <div class="modal" id="accessRequestModal">
-        <div class="modal-content confirm-modal" style="max-width: 440px;">
-            <div style="width: 50px; height: 50px; background: #e0e7ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto;">
-                <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: var(--primary);"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            </div>
-            <h3 style="font-size: 18px; color: var(--text); margin-bottom: 8px;">შესვლის მოთხოვნა სხვა მოწყობილობიდან</h3>
-            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">ახალმა მოწყობილობამ მოითხოვა სისტემაში შესვლა:</p>
-            <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; text-align: left; font-size: 13px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px;">
-                <div><strong>სახელი და გვარი:</strong> <span id="reqUsername">-</span></div>
-                <div><strong>IP მისამართი:</strong> <span id="reqIp">-</span></div>
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <button class="btn btn-danger" onclick="rejectAccessRequest()" style="flex: 1; justify-content: center;">უარყოფა</button>
-                <button class="btn" onclick="approveAccessRequest()" style="flex: 1; justify-content: center; background: #10b981;">თანხმობა</button>
-            </div>
-        </div>
-    </div>
+        let websites = [];
+        let currentEditingId = null;
+        let autoDetectedBgColor = '#eef2ff';
+        let isLogoValid = false;
+        let particlesInitialized = false;
 
-<script>
-    const SUPABASE_URL = 'https://lgcbpklqdfpdybbbchde.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxnY2Jwa2xxZGZwZHliYmJjaGRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyNzcyOTIsImV4cCI6MjEwMzg1MzI5Mn0.3EOQMNOPnCzdIwIEDYiLNC4nhEEYS1XzCPY7273UxvE';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const STORAGE_BUCKET = 'shogi-documents';
+        // DOM ელემენტები
+        const loginWrapper = document.getElementById('loginWrapper');
+        const particlesBg = document.getElementById('particles-js');
+        const globalLoader = document.getElementById('globalLoader');
+        const loaderText = document.getElementById('loaderText');
+        const logoSpinner = document.getElementById('logoSpinner');
+        const mainHeader = document.getElementById('mainHeader');
+        const protectedContent = document.getElementById('protectedContent');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const openPanelBtn = document.getElementById('openPanelBtn');
+        const refreshBrandBtn = document.getElementById('refreshBrandBtn');
+        const mainModal = document.getElementById('mainModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const editDescModal = document.getElementById('editDescModal');
+        const websitesGrid = document.getElementById('websitesGrid');
+        const deleteWebsiteList = document.getElementById('deleteWebsiteList');
+        const editWebsiteList = document.getElementById('editWebsiteList');
 
-    const icons = {
-        folder: '<svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>',
-        image: '<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
-        pdf: '<svg viewBox="0 0 24 24"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1.5h1.5V14H19v1.5h-2V7h3.5v1.5zM9 9.5h1v-1H9v1z"/></svg>',
-        excel: '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>',
-        word: '<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',
-        file: '<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>'
-    };
+        const logoUrlInput = document.getElementById('logoUrlInput');
+        const logoPreviewImg = document.getElementById('logoPreviewImg');
+        const logoPreviewBox = document.getElementById('logoPreviewBox');
+        const logoPreviewPlaceholder = document.getElementById('logoPreviewPlaceholder');
+        const autoFetchLogoBtn = document.getElementById('autoFetchLogoBtn');
+        const googleSearchLogoBtn = document.getElementById('googleSearchLogoBtn');
+        const logoFileInput = document.getElementById('logoFileInput');
+        const websiteUrl = document.getElementById('websiteUrl');
+        const websiteName = document.getElementById('websiteName');
 
-    let filesData = [];
-    let currentActiveFile = null;
-    let currentZoom = 1;
-    let searchQuery = '';
-    let currentDocumentKind = null;
-    let pageJumpHandler = null;
-    let currentPageState = { total: 0, current: 1 };
-    let activeExcelWorkbook = null;
-    let activeExcelSheetName = '';
-    let activePdfDoc = null;
-    let pdfIntersectionObserver = null;
-    let activePdfRenderedPages = new Set();
-    let activePdfRenderingPages = new Map();
-    let activePdfRenderVersion = 0;
-
-    let currentRequestIdModal = null;
-    let activeLoginRequestId = null;
-    let mobileOpenCategory = null;
-
-    function getDeviceId() {
-        let id = localStorage.getItem('shogi_device_id');
-        if (!id) {
-            id = 'dev_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
-            localStorage.setItem('shogi_device_id', id);
-        }
-        return id;
-    }
-
-    async function getClientIP() {
-        try {
-            const res = await fetch('https://api.ipify.org?format=json');
-            const data = await res.json();
-            return data.ip;
-        } catch (e) {
-            return 'უცნობი IP';
-        }
-    }
-
-    function getFileNameLower(file) {
-        return (file?.name || '').toLowerCase();
-    }
-
-    function isPdfFile(file) {
-        const name = getFileNameLower(file);
-        return (file?.type || '').includes('pdf') || name.endsWith('.pdf');
-    }
-
-    function isExcelFile(file) {
-        const name = getFileNameLower(file);
-        const type = file?.type || '';
-        return type.includes('sheet') || type.includes('excel') || type.includes('csv') || /\.xls[x]?$|\.csv$/i.test(name);
-    }
-
-    function isWordFile(file) {
-        const name = getFileNameLower(file);
-        const type = file?.type || '';
-        return !isExcelFile(file) && (type.includes('word') || type.includes('document') || name.endsWith('.docx'));
-    }
-
-    function isImageFile(file) {
-        const name = getFileNameLower(file);
-        return (file?.type || '').includes('image') || /\.(jpg|jpeg|png|webp)$/i.test(name);
-    }
-
-    function escapeHtml(value) {
-        return String(value ?? '')
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
-    function getSafeBaseName(file) {
-        const rawName = (file?.name || file?.title || 'document').replace(/\.[^/.]+$/, '');
-        return rawName.replace(/[\\/:*?"<>|]+/g, '_').trim() || 'document';
-    }
-
-    function downloadBlob(blob, fileName) {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-    }
-
-    function closeDownloadOptions() {
-        document.getElementById('downloadOptionsMenu')?.classList.remove('show');
-    }
-
-    function setModalBodyMode(mode) {
-        const modalBody = document.getElementById('modalBody');
-        modalBody.classList.remove('pdf-mode', 'excel-mode', 'word-mode');
-        if (mode) modalBody.classList.add(`${mode}-mode`);
-    }
-
-    function hidePageJump() {
-        pageJumpHandler = null;
-        currentPageState = { total: 0, current: 1 };
-        const group = document.getElementById('pageJumpGroup');
-        if (group) group.style.display = 'none';
-    }
-
-    function setupPageJump(totalPages, onJump, initialPage = 1) {
-        const group = document.getElementById('pageJumpGroup');
-        const input = document.getElementById('pageJumpInput');
-        const totalLabel = document.getElementById('pageTotalLabel');
-        if (!group || !input || !totalLabel || !totalPages || totalPages < 1) {
-            hidePageJump();
-            return;
+        function showLoader(text = 'იტვირთება...') {
+            loaderText.textContent = text;
+            globalLoader.classList.add('active');
         }
 
-        currentPageState = { total: totalPages, current: initialPage };
-        pageJumpHandler = onJump;
-        group.style.display = 'flex';
-        input.min = '1';
-        input.max = String(totalPages);
-        input.value = String(initialPage);
-        totalLabel.textContent = `/ ${totalPages}`;
-    }
-
-    function setPageJumpValue(pageNumber) {
-        const input = document.getElementById('pageJumpInput');
-        if (!input || !currentPageState.total) return;
-        const normalized = Math.max(1, Math.min(currentPageState.total, Number(pageNumber) || 1));
-        currentPageState.current = normalized;
-        input.value = String(normalized);
-    }
-
-    function jumpToPageFromInput() {
-        const input = document.getElementById('pageJumpInput');
-        if (!input || !pageJumpHandler || !currentPageState.total) return;
-        const pageNumber = Math.max(1, Math.min(currentPageState.total, Number(input.value) || 1));
-        setPageJumpValue(pageNumber);
-        pageJumpHandler(pageNumber);
-    }
-
-    function handlePageJumpKey(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            jumpToPageFromInput();
-            event.target.blur();
+        function hideLoader() {
+            globalLoader.classList.remove('active');
         }
-    }
 
-    function cleanupPdfViewer() {
-        if (pdfIntersectionObserver) {
-            pdfIntersectionObserver.disconnect();
-            pdfIntersectionObserver = null;
-        }
-        activePdfDoc = null;
-        activePdfRenderedPages.clear();
-        activePdfRenderingPages.clear();
-        activePdfRenderVersion++;
-    }
-
-    function getPdfPageShell(pageNumber) {
-        return document.getElementById(`pdf_page_wrap_${pageNumber}`);
-    }
-
-    function createPdfPageShells(totalPages) {
-        const viewer = document.getElementById('zoomableContent');
-        if (!viewer) return;
-
-        const fragment = document.createDocumentFragment();
-        for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
-            const pageShell = document.createElement('div');
-            pageShell.className = 'pdf-page-shell';
-            pageShell.id = `pdf_page_wrap_${pageNumber}`;
-            pageShell.dataset.pageNumber = String(pageNumber);
-            pageShell.innerHTML = '<div class="pdf-page-loading">იტვირთება...</div>';
-            fragment.appendChild(pageShell);
-        }
-        viewer.appendChild(fragment);
-    }
-
-    function renderSimplePdfTextLayer(textContent, viewport, container) {
-        if (!pdfjsLib.Util) return;
-
-        textContent.items.forEach((item) => {
-            if (!item.str) return;
-            const span = document.createElement('span');
-            span.textContent = item.str;
-
-            const transform = pdfjsLib.Util.transform(viewport.transform, item.transform);
-            const angle = Math.atan2(transform[1], transform[0]);
-            const fontHeight = Math.hypot(transform[2], transform[3]);
-
-            span.style.left = `${transform[4]}px`;
-            span.style.top = `${transform[5] - fontHeight}px`;
-            span.style.fontSize = `${fontHeight}px`;
-            span.style.transform = `rotate(${angle}rad)`;
-            span.style.fontFamily = 'sans-serif';
-            container.appendChild(span);
-        });
-    }
-
-    async function renderPdfPage(pageNumber) {
-        if (!activePdfDoc) return;
-        if (activePdfRenderedPages.has(pageNumber)) return;
-        if (activePdfRenderingPages.has(pageNumber)) return activePdfRenderingPages.get(pageNumber);
-
-        const version = activePdfRenderVersion;
-        const renderPromise = (async () => {
-            const pageShell = getPdfPageShell(pageNumber);
-            if (!pageShell || !activePdfDoc) return;
-
-            const scaleValue = 1.35 * currentZoom;
-            const page = await activePdfDoc.getPage(pageNumber);
-            if (version !== activePdfRenderVersion) return;
-
-            const viewport = page.getViewport({ scale: scaleValue });
-            const outputScale = window.devicePixelRatio || 1;
-
-            pageShell.style.width = `${viewport.width}px`;
-            pageShell.style.height = `${viewport.height}px`;
-            pageShell.style.aspectRatio = 'auto';
-            pageShell.style.setProperty('--scale-factor', String(scaleValue)); // <--- დაამატე ეს
-
-            pageShell.innerHTML = '<canvas></canvas><div class="pdf-text-layer"></div>';
-
-            const canvas = pageShell.querySelector('canvas');
-            const textLayer = pageShell.querySelector('.pdf-text-layer');
-            textLayer.style.setProperty('--scale-factor', String(scaleValue)); // <--- დაამატე ეს
-            
-            const context = canvas.getContext('2d');
-
-            canvas.width = Math.floor(viewport.width * outputScale);
-            canvas.height = Math.floor(viewport.height * outputScale);
-            canvas.style.width = `${viewport.width}px`;
-            canvas.style.height = `${viewport.height}px`;
-
-            await page.render({
-                canvasContext: context,
-                viewport,
-                transform: outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null
-            }).promise;
-
-            if (version !== activePdfRenderVersion) return;
-
-            const textContent = await page.getTextContent();
-            if (version !== activePdfRenderVersion) return;
-
-            textLayer.innerHTML = '';
-            if (typeof pdfjsLib.renderTextLayer === 'function') {
-                const textLayerTask = pdfjsLib.renderTextLayer({
-                    textContentSource: textContent,
-                    container: textLayer,
-                    viewport,
-                    textDivs: []
+        // 1. Particles.js ინიციალიზაცია ხილულ კონტეინერზე
+        function initParticles() {
+            if (window.particlesJS && !particlesInitialized) {
+                particlesInitialized = true;
+                particlesJS('particles-js', {
+                    "particles": {
+                        "number": { "value": 75, "density": { "enable": true, "value_area": 800 } },
+                        "color": { "value": ["#2563eb", "#4f46e5", "#0ea5e9"] },
+                        "shape": { "type": "circle" },
+                        "opacity": {
+                            "value": 0.55,
+                            "random": false
+                        },
+                        "size": {
+                            "value": 4,
+                            "random": true
+                        },
+                        "line_linked": {
+                            "enable": true,
+                            "distance": 150,
+                            "color": "#3b82f6",
+                            "opacity": 0.38,
+                            "width": 1.3
+                        },
+                        "move": {
+                            "enable": true,
+                            "speed": 1.8,
+                            "direction": "none",
+                            "random": false,
+                            "straight": false,
+                            "out_mode": "out",
+                            "bounce": false
+                        }
+                    },
+                    "interactivity": {
+                        "detect_on": "window",
+                        "events": {
+                            "onhover": { "enable": true, "mode": "grab" },
+                            "onclick": { "enable": true, "mode": "push" },
+                            "resize": true
+                        },
+                        "modes": {
+                            "grab": { "distance": 160, "line_linked": { "opacity": 0.65 } },
+                            "push": { "particles_nb": 3 }
+                        }
+                    },
+                    "retina_detect": true
                 });
-                if (textLayerTask?.promise) await textLayerTask.promise;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (isLoggedIn) {
+                showProtectedContent();
             } else {
-                renderSimplePdfTextLayer(textContent, viewport, textLayer);
+                showLoginForm();
             }
-
-            activePdfRenderedPages.add(pageNumber);
-        })().catch((err) => {
-            console.error(err);
-            const pageShell = getPdfPageShell(pageNumber);
-            if (pageShell) pageShell.innerHTML = '<div class="pdf-page-loading" style="color:#ef4444;">გვერდის ჩატვირთვა ვერ მოხერხდა</div>';
-        }).finally(() => {
-            activePdfRenderingPages.delete(pageNumber);
+            initFirebase();
         });
 
-        activePdfRenderingPages.set(pageNumber, renderPromise);
-        return renderPromise;
-    }
+        // 3. „სერვისების პორტალი“-ზე დაჭერით განახლება + Loading Circle
+        refreshBrandBtn.addEventListener('click', () => {
+            refreshBrandBtn.classList.add('refreshing');
+            showLoader('მიმდინარეობს განახლება...');
+            setTimeout(() => {
+                renderWebsites();
+                hideLoader();
+                refreshBrandBtn.classList.remove('refreshing');
+                showToast('პორტალი განახლდა', true);
+            }, 400);
+        });
 
-    function setupPdfLazyRendering() {
-        const viewer = document.getElementById('zoomableContent');
-        if (!viewer) return;
+        // 5. ლოგოს ფერის 100% ავტომატური ამოცნობა (Canvas + CORS Proxy fallback + ჰეშ-ფერი)
+        function computeFallbackPastel(str) {
+            const pastelPalette = [
+                '#e6f4ea', '#e0e7ff', '#fef3c7', '#fee2e2',
+                '#e0f2fe', '#f3e8ff', '#fce7f3', '#dcfce7', '#ffedd5'
+            ];
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return pastelPalette[Math.abs(hash) % pastelPalette.length];
+        }
 
-        if (pdfIntersectionObserver) pdfIntersectionObserver.disconnect();
+        function extractDominantPastelFromImage(imgEl, fallbackSeed = '') {
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 40;
+                canvas.height = 40;
+                ctx.drawImage(imgEl, 0, 0, 40, 40);
+                const data = ctx.getImageData(0, 0, 40, 40).data;
 
-        if ('IntersectionObserver' in window) {
-            pdfIntersectionObserver = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        renderPdfPage(Number(entry.target.dataset.pageNumber));
+                let r = 0, g = 0, b = 0, count = 0;
+                for (let i = 0; i < data.length; i += 4) {
+                    const alpha = data[i + 3];
+                    const pr = data[i], pg = data[i + 1], pb = data[i + 2];
+                    // გამოვრიცხოთ თეთრი, შავი და გამჭვირვალე პიქსელები
+                    const isWhite = (pr > 235 && pg > 235 && pb > 235);
+                    const isBlack = (pr < 25 && pg < 25 && pb < 25);
+                    if (alpha > 120 && !isWhite && !isBlack) {
+                        r += pr; g += pg; b += pb; count++;
                     }
-                });
-            }, {
-                root: viewer,
-                rootMargin: '700px 0px'
-            });
+                }
 
-            viewer.querySelectorAll('.pdf-page-shell').forEach((pageShell) => {
-                pdfIntersectionObserver.observe(pageShell);
-            });
+                if (count > 0) {
+                    r = Math.round(r / count);
+                    g = Math.round(g / count);
+                    b = Math.round(b / count);
+                    // 16% ლოგოს ფერი + 84% თეთრი — რბილი პასტელური ფონისთვის
+                    const pastelR = Math.round(r * 0.16 + 255 * 0.84);
+                    const pastelG = Math.round(g * 0.16 + 255 * 0.84);
+                    const pastelB = Math.round(b * 0.16 + 255 * 0.84);
+                    return "#" + ((1 << 24) + (pastelR << 16) + (pastelG << 8) + pastelB).toString(16).slice(1);
+                }
+            } catch (e) {
+                // CORS შეზღუდვა
+            }
+            return computeFallbackPastel(fallbackSeed || imgEl.src || 'portal');
         }
 
-        viewer.addEventListener('scroll', syncPdfPageFromScroll, { passive: true });
-        renderPdfPage(1);
-    }
-
-    function renderPdfVisiblePages() {
-        const viewer = document.getElementById('zoomableContent');
-        if (!viewer) return;
-
-        const viewerRect = viewer.getBoundingClientRect();
-        viewer.querySelectorAll('.pdf-page-shell').forEach((pageShell) => {
-            const rect = pageShell.getBoundingClientRect();
-            const isNearViewport = rect.bottom >= viewerRect.top - 700 && rect.top <= viewerRect.bottom + 700;
-            if (isNearViewport) renderPdfPage(Number(pageShell.dataset.pageNumber));
-        });
-    }
-
-    function syncPdfPageFromScroll() {
-        if (currentDocumentKind !== 'pdf' || !currentPageState.total) return;
-        const viewer = document.getElementById('zoomableContent');
-        if (!viewer) return;
-
-        const viewerTop = viewer.getBoundingClientRect().top;
-        let closestPage = currentPageState.current;
-        let closestDistance = Infinity;
-
-        viewer.querySelectorAll('.pdf-page-shell').forEach((pageShell) => {
-            const distance = Math.abs(pageShell.getBoundingClientRect().top - viewerTop - 12);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestPage = Number(pageShell.dataset.pageNumber);
-            }
-        });
-
-        setPageJumpValue(closestPage);
-        renderPdfVisiblePages();
-    }
-
-    function rerenderPdfVisiblePages() {
-        if (currentDocumentKind !== 'pdf' || !activePdfDoc) return;
-        const viewer = document.getElementById('zoomableContent');
-        if (!viewer) return;
-
-        activePdfRenderVersion++;
-        activePdfRenderedPages.clear();
-        activePdfRenderingPages.clear();
-
-        viewer.querySelectorAll('.pdf-page-shell').forEach((pageShell) => {
-            pageShell.style.width = '';
-            pageShell.style.height = '';
-            pageShell.style.aspectRatio = '0.707';
-            pageShell.innerHTML = '<div class="pdf-page-loading">იტვირთება...</div>';
-        });
-
-        renderPdfVisiblePages();
-        renderPdfPage(currentPageState.current || 1);
-    }
-
-    function getWordPages() {
-        const container = document.getElementById('zoomableContent');
-        if (!container) return [];
-        const pages = Array.from(container.querySelectorAll('section.docx'));
-        return pages.length ? pages : [container];
-    }
-
-    async function fetchFileArrayBuffer(url) {
-        const res = await fetch(url);
-        const blob = await res.blob();
-        return await blob.arrayBuffer();
-    }
-
-    async function readExcelDataFromUrl(fileUrl) {
-        const buffer = await fetchFileArrayBuffer(fileUrl);
-        const workbook = XLSX.read(buffer, { type: 'array', codepage: 65001, cellDates: true });
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false, defval: '' });
-        return { workbook, firstSheetName, worksheet, jsonData };
-    }
-
-    function buildExcelTableHtml(jsonData) {
-        let maxCols = 0;
-        jsonData.forEach(row => {
-            if (row.length > maxCols) maxCols = row.length;
-        });
-        maxCols = Math.max(maxCols, 5);
-
-        let html = '<table class="excel-rendered" id="zoomableContent">';
-        html += '<thead><tr><th class="excel-corner-cell"></th>';
-        for (let c = 0; c < maxCols; c++) {
-            html += `<th>${getExcelColumnName(c)}</th>`;
-        }
-        html += '</tr></thead><tbody>';
-
-        jsonData.forEach((row, rowIndex) => {
-            html += `<tr><td class="excel-row-header">${rowIndex + 1}</td>`;
-            for (let c = 0; c < maxCols; c++) {
-                html += `<td>${escapeHtml(row[c])}</td>`;
-            }
-            html += '</tr>';
-        });
-        html += '</tbody></table>';
-        return html;
-    }
-
-    function showToast(message, type = 'error') {
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.innerHTML = `<span>${message}</span>`;
-        container.appendChild(toast);
-
-        setTimeout(() => {
-            toast.style.animation = 'slideOutRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards';
-            setTimeout(() => toast.remove(), 350);
-        }, 3500);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const isAuth = localStorage.getItem('isLoggedIn') === 'true';
-        if (isAuth) {
-            showApp();
-        } else {
-            showLogin();
-        }
-
-        document.addEventListener('click', (e) => {
-            const dropdown = document.getElementById('customCategoryDropdown');
-            const wrapper = document.getElementById('fileLocation')?.closest('.form-group');
-            if (dropdown && wrapper && !wrapper.contains(e.target)) {
-                dropdown.style.display = 'none';
-            }
-
-            const downloadWrapper = document.getElementById('downloadMenuWrapper');
-            if (downloadWrapper && !downloadWrapper.contains(e.target)) {
-                closeDownloadOptions();
-            }
-        });
-    });
-
-    function refreshData() {
-        showToast('მონაცემები განახლდა', 'success');
-        fetchFilesFromSupabase();
-    }
-
-    async function handleLogin() {
-        const user = document.getElementById('usernameInput').value.trim();
-        const pass = document.getElementById('passwordInput').value.trim();
-
-        if (user === 'alex' && pass === '2911') {
-            const deviceId = getDeviceId();
-            const isMasterDevice = localStorage.getItem('shogi_is_master') === 'true';
-
-            if (isMasterDevice) {
-                localStorage.setItem('isLoggedIn', 'true');
-                showToast('წარმატებით შეხვედით სისტემაში!', 'success');
-                showApp();
+        function analyzeLogoAndSetColor(src) {
+            if (!src || src.trim() === '') {
+                isLogoValid = false;
+                logoPreviewImg.style.display = 'none';
+                logoSpinner.style.display = 'none';
+                logoPreviewPlaceholder.style.display = 'block';
+                logoPreviewBox.style.background = '#eef2ff';
                 return;
             }
 
-            showToast('მიმდინარეობს ნებართვის მოთხოვნა...', 'success');
-            const ip = await getClientIP();
-            const requestId = 'req_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
-            activeLoginRequestId = requestId;
+            logoSpinner.style.display = 'block';
+            logoPreviewPlaceholder.style.display = 'none';
+            logoPreviewImg.style.display = 'none';
 
-            showWaitingScreen(requestId, user);
+            // ვამოწმებთ სურათის ჩატვირთვას
+            const displayImg = new Image();
+            displayImg.onload = () => {
+                isLogoValid = true;
+                logoSpinner.style.display = 'none';
+                logoPreviewImg.src = src;
+                logoPreviewImg.style.display = 'block';
 
-            await supabaseClient.from('login_requests').insert([{
-                id: requestId,
-                device_id: deviceId,
-                username: user,
-                ip: ip,
-                timestamp: Date.now(),
-                status: 'pending'
-            }]);
-
-            const channel = supabaseClient.channel('login_req_' + requestId)
-                .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'login_requests', filter: `id=eq.${requestId}` }, (payload) => {
-                    const val = payload.new;
-                    if (val.status === 'approved') {
-                        supabaseClient.removeChannel(channel);
-                        supabaseClient.from('login_requests').delete().eq('id', requestId);
-                        localStorage.setItem('shogi_is_master', 'true');
-                        localStorage.setItem('isLoggedIn', 'true');
-                        hideWaitingScreen();
-                        showToast('ნებართვა გაცემულია! წარმატებით შეხვედით.', 'success');
-                        showApp();
-                    } else if (val.status === 'rejected') {
-                        supabaseClient.removeChannel(channel);
-                        supabaseClient.from('login_requests').delete().eq('id', requestId);
-                        hideWaitingScreen();
-                        showToast('შესვლის მოთხოვნა უარყოფილია მთავარი მოწყობილობის მიერ.', 'error');
-                    }
-                })
-                .subscribe();
-
-        } else {
-            showToast('არასწორი მომხმარებელი ან პაროლი!', 'error');
-        }
-    }
-
-    function showWaitingScreen(requestId, username) {
-        const card = document.querySelector('.login-card');
-        card.dataset.originalHtml = card.innerHTML;
-        card.innerHTML = `
-            <div class="spinner-container" style="padding: 20px 0;">
-                <div class="spinner"></div>
-                <h3 style="margin-top: 15px; font-size: 18px; color: var(--text);">ნებართვის მოლოდინში...</h3>
-                <p style="color: var(--text-muted); font-size: 13px; margin-top: 8px;">გთხოვთ, დაადასტუროთ შესვლა მთავარი მოწყობილობიდან.</p>
-                <button class="btn btn-outline" style="margin-top: 25px; width: 100%; justify-content: center;" onclick="cancelLoginRequest('${requestId}')">გაუქმება</button>
-            </div>
-        `;
-    }
-
-    async function cancelLoginRequest(requestId) {
-        if (requestId) {
-            await supabaseClient.from('login_requests').delete().eq('id', requestId);
-        }
-        hideWaitingScreen();
-        showToast('შესვლის მოთხოვნა გაუქმდა', 'success');
-    }
-
-    function hideWaitingScreen() {
-        const card = document.querySelector('.login-card');
-        if (card && card.dataset.originalHtml) {
-            card.innerHTML = card.dataset.originalHtml;
-        }
-        activeLoginRequestId = null;
-    }
-
-    function initAdminApprovalListener() {
-        supabaseClient.channel('admin_login_listener')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'login_requests' }, (payload) => {
-                const req = payload.new;
-                if (req.status === 'pending') {
-                    const myDeviceId = getDeviceId();
-                    if (req.device_id !== myDeviceId) {
-                        currentRequestIdModal = req.id;
-                        showAccessRequestModal(req);
-                    }
+                // თუ Base64-ია, პირდაპირ ვიღებთ ფერს
+                if (src.startsWith('data:')) {
+                    autoDetectedBgColor = extractDominantPastelFromImage(displayImg, websiteName.value);
+                    logoPreviewBox.style.background = autoDetectedBgColor;
+                } else {
+                    // გარე URL-ისთვის ვცდილობთ CORS-ით წაკითხვას ფერის ზუსტი ამოღებისთვის
+                    const corsImg = new Image();
+                    corsImg.crossOrigin = 'Anonymous';
+                    corsImg.onload = () => {
+                        autoDetectedBgColor = extractDominantPastelFromImage(corsImg, src);
+                        logoPreviewBox.style.background = autoDetectedBgColor;
+                    };
+                    corsImg.onerror = () => {
+                        autoDetectedBgColor = computeFallbackPastel(websiteName.value || src);
+                        logoPreviewBox.style.background = autoDetectedBgColor;
+                    };
+                    corsImg.src = `https://wsrv.nl/?url=${encodeURIComponent(src)}&w=64&h=64&output=png`;
                 }
-            })
-            .subscribe();
-    }
+            };
 
-    function showAccessRequestModal(reqData) {
-        document.getElementById('reqUsername').textContent = reqData.username;
-        document.getElementById('reqIp').textContent = reqData.ip;
-        document.getElementById('accessRequestModal').style.display = 'flex';
-    }
+            displayImg.onerror = () => {
+                isLogoValid = false;
+                logoSpinner.style.display = 'none';
+                logoPreviewImg.style.display = 'none';
+                logoPreviewPlaceholder.style.display = 'block';
+                showToast('ლოგოს ბმული არასწორია ან სურათი ვერ ჩაიტვირთა');
+            };
 
-    function closeAccessModal() {
-        const modal = document.getElementById('accessRequestModal');
-        if (modal) modal.style.display = 'none';
-        currentRequestIdModal = null;
-    }
-
-    async function approveAccessRequest() {
-        if (!currentRequestIdModal) return;
-        const { error } = await supabaseClient.from('login_requests').update({ status: 'approved' }).eq('id', currentRequestIdModal);
-        if (!error) {
-            showToast('შესვლის მოთხოვნა დამტკიცდა', 'success');
-            closeAccessModal();
-        } else {
-            showToast('შეცდომა ოპერაციისას', 'error');
-        }
-    }
-
-    async function rejectAccessRequest() {
-        if (!currentRequestIdModal) return;
-        const { error } = await supabaseClient.from('login_requests').update({ status: 'rejected' }).eq('id', currentRequestIdModal);
-        if (!error) {
-            showToast('შესვლის მოთხოვნა უარყოფილია', 'success');
-            closeAccessModal();
-        } else {
-            showToast('შეცდომა ოპერაციისას', 'error');
-        }
-    }
-
-    function handleLogout() {
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('shogi_is_master');
-        if (activeLoginRequestId) {
-            supabaseClient.from('login_requests').delete().eq('id', activeLoginRequestId);
-        }
-        showToast('წარმატებით გახვედით სისტემიდან', 'success');
-        showLogin();
-    }
-
-    function showLogin() {
-        document.getElementById('loginView').classList.remove('hidden');
-        document.getElementById('appView').classList.add('hidden');
-    }
-
-    function showApp() {
-        document.getElementById('loginView').classList.add('hidden');
-        document.getElementById('appView').classList.remove('hidden');
-        fetchFilesFromSupabase();
-        initAdminApprovalListener();
-        initFilesRealtimeSync();
-    }
-
-    async function fetchFilesFromSupabase() {
-        const { data, error } = await supabaseClient.from('files').select('*').order('created_at', { ascending: false });
-        if (error) {
-            showToast('მონაცემთა ბაზასთან კავშირის შეცდომა', 'error');
-            return;
-        }
-        filesData = data || [];
-        renderFiles();
-    }
-
-    function initFilesRealtimeSync() {
-        supabaseClient.channel('files_sync')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'files' }, () => {
-                fetchFilesFromSupabase();
-            })
-            .subscribe();
-    }
-
-    function getCategoriesList() {
-        const categories = [...new Set(filesData.map(f => f.location).filter(Boolean))];
-        if (!categories.includes('-')) categories.unshift('-');
-        return categories;
-    }
-
-    function renderCategoryDropdownOptions(filterText = '') {
-        const dropdown = document.getElementById('customCategoryDropdown');
-        if (!dropdown) return;
-
-        const categories = getCategoriesList();
-        const filtered = categories.filter(cat => cat.toLowerCase().includes(filterText.toLowerCase()));
-
-        if (filtered.length === 0) {
-            dropdown.style.display = 'none';
-            return;
+            displayImg.src = src;
         }
 
-        dropdown.innerHTML = filtered.map(cat => `
-            <div class="custom-dropdown-item" onclick="selectCategoryItem('${cat}')">${cat}</div>
-        `).join('');
-        dropdown.style.display = 'block';
-    }
-
-    function toggleCategoryDropdown(e) {
-        e.stopPropagation();
-        const dropdown = document.getElementById('customCategoryDropdown');
-        if (dropdown.style.display === 'block') {
-            dropdown.style.display = 'none';
-        } else {
-            const val = document.getElementById('fileLocation').value;
-            renderCategoryDropdownOptions(val);
-        }
-    }
-
-    function openCategoryDropdown() {
-        const val = document.getElementById('fileLocation').value;
-        renderCategoryDropdownOptions(val);
-    }
-
-    function filterCategoryDropdown(e) {
-        renderCategoryDropdownOptions(e.target.value);
-    }
-
-    function selectCategoryItem(cat) {
-        document.getElementById('fileLocation').value = cat;
-        document.getElementById('customCategoryDropdown').style.display = 'none';
-    }
-
-    function handleSearch(event) {
-        searchQuery = event.target.value.toLowerCase().trim();
-        renderFiles();
-    }
-
-    function handleCategoryClick(location) {
-        if (window.innerWidth > 768) return;
-        if (searchQuery.trim() !== '') return;
-
-        if (mobileOpenCategory === location) {
-            mobileOpenCategory = null;
-        } else {
-            mobileOpenCategory = location;
-        }
-        renderFiles();
-    }
-
-    function openUploadModal() {
-        document.getElementById('uploadModal').style.display = 'flex';
-    }
-
-    function closeUploadModal() {
-        document.getElementById('uploadModal').style.display = 'none';
-        document.getElementById('fileTitle').value = '';
-        document.getElementById('fileLocation').value = '';
-        document.getElementById('fileInput').value = '';
-        document.getElementById('uploadPreview').innerHTML = '<span class="preview-placeholder">ფაილი არ არის არჩეული</span>';
-
-        const progressContainer = document.getElementById('uploadProgressContainer');
-        const progressBar = document.getElementById('uploadProgressBar');
-        const progressPercent = document.getElementById('uploadPercent');
-        if (progressContainer) progressContainer.classList.add('hidden');
-        if (progressBar) progressBar.style.width = '0%';
-        if (progressPercent) progressPercent.textContent = '0%';
-
-        const dropdown = document.getElementById('customCategoryDropdown');
-        if (dropdown) dropdown.style.display = 'none';
-    }
-
-    async function uploadFile() {
-        const titleInput = document.getElementById('fileTitle');
-        const locationInput = document.getElementById('fileLocation');
-        const fileInput = document.getElementById('fileInput');
-
-        if (!titleInput.value || !fileInput.files[0]) {
-            showToast('გთხოვთ მიუთითოთ სათაური და აირჩიოთ ფაილი!', 'error');
-            return;
-        }
-
-        const file = fileInput.files[0];
-        if (!validateFileFormat(file)) {
-            showToast('მხოლოდ გახსნადი ფორმატის ფაილებია დაშვებული!', 'error');
-            return;
-        }
-
-        const uploadBtn = document.getElementById('uploadBtn');
-        const progressContainer = document.getElementById('uploadProgressContainer');
-        const progressBar = document.getElementById('uploadProgressBar');
-        const progressPercent = document.getElementById('uploadPercent');
-
-        uploadBtn.disabled = true;
-        uploadBtn.innerHTML = '<div class="spinner" style="width: 20px; height: 20px; border-width: 2px; border-top-color: white;"></div> მიმდინარეობს ატვირთვა...';
-
-        progressContainer.classList.remove('hidden');
-        progressBar.style.width = '30%';
-        progressPercent.textContent = '30%';
-
-        try {
-            const fileExt = file.name.split('.').pop();
-            const uniqueFileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
-
-            const { data: storageData, error: storageError } = await supabaseClient.storage
-                .from(STORAGE_BUCKET)
-                .upload(uniqueFileName, file);
-
-            if (storageError) throw storageError;
-
-            progressBar.style.width = '70%';
-            progressPercent.textContent = '70%';
-
-            const { data: { publicUrl } } = supabaseClient.storage
-                .from(STORAGE_BUCKET)
-                .getPublicUrl(uniqueFileName);
-
-            let fileType = file.type;
-            const fileNameLower = file.name.toLowerCase();
-
-            if (fileNameLower.endsWith('.pdf')) {
-                fileType = 'application/pdf';
-            } else if (fileNameLower.match(/\.xls[x]?$|\.csv$/)) {
-                fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-            } else if (fileNameLower.endsWith('.docx')) {
-                fileType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-            } else if (fileNameLower.match(/\.(jpg|jpeg|webp)$/)) {
-                fileType = 'image/jpeg';
-            } else if (fileNameLower.endsWith('.png')) {
-                fileType = 'image/png';
-            }
-
-            const { error: dbError } = await supabaseClient.from('files').insert([{
-                title: titleInput.value,
-                location: locationInput.value.trim() || '-',
-                name: file.name,
-                type: fileType,
-                url: publicUrl
-            }]);
-
-            if (dbError) throw dbError;
-
-            progressBar.style.width = '100%';
-            progressPercent.textContent = '100%';
-
-            setTimeout(() => {
-                closeUploadModal();
-                showToast('ფაილი წარმატებით აიტვირთა!', 'success');
-            }, 300);
-
-        } catch (error) {
-            console.error(error);
-            showToast('ატვირთვის შეცდომა', 'error');
-        } finally {
-            uploadBtn.disabled = false;
-            uploadBtn.innerHTML = 'ატვირთვა';
-        }
-    }
-
-    async function renderPdfThumbnail(fileUrl, containerElement) {
-        try {
-            const buffer = await fetchFileArrayBuffer(fileUrl);
-            const loadingTask = pdfjsLib.getDocument({ data: buffer });
-            const pdf = await loadingTask.promise;
-            const page = await pdf.getPage(1);
-
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            const viewport = page.getViewport({ scale: 0.5 });
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            await page.render({ canvasContext: context, viewport: viewport }).promise;
-            containerElement.innerHTML = '';
-            containerElement.appendChild(canvas);
-        } catch(e) {
-            containerElement.innerHTML = `<div class="file-card-preview-placeholder"><div style="width:36px;height:36px;fill:#dc2626">${icons.pdf}</div><span>PDF</span></div>`;
-        }
-    }
-
-    async function renderExcelThumbnail(fileUrl, containerElement) {
-        try {
-            const { jsonData } = await readExcelDataFromUrl(fileUrl);
-
-            if (jsonData.length > 0) {
-                let html = '<table class="preview-mini-table">';
-                const rowsToShow = Math.min(jsonData.length, 5);
-                for (let i = 0; i < rowsToShow; i++) {
-                    html += '<tr>';
-                    const row = jsonData[i];
-                    const colsToShow = Math.min(row.length, 4);
-                    for (let j = 0; j < colsToShow; j++) {
-                        html += `<td>${escapeHtml(row[j])}</td>`;
-                    }
-                    html += '</tr>';
-                }
-                html += '</table>';
-                containerElement.innerHTML = `<div class="excel-preview-wrapper">${html}</div>`;
+        // ავტომატური ფერის გენერაცია ბარათის რენდერის დროსაც (თუ ბაზაში ფერი არ წერია ან გარე ბმულია)
+        function autoTintCardHeader(imgElement, headerElement, seedText) {
+            const corsImg = new Image();
+            corsImg.crossOrigin = 'Anonymous';
+            corsImg.onload = () => {
+                const color = extractDominantPastelFromImage(corsImg, seedText);
+                headerElement.style.background = color;
+            };
+            corsImg.onerror = () => {
+                headerElement.style.background = computeFallbackPastel(seedText);
+            };
+            if (imgElement.src.startsWith('data:')) {
+                headerElement.style.background = extractDominantPastelFromImage(imgElement, seedText);
             } else {
-                containerElement.innerHTML = `<div class="file-card-preview-placeholder"><div style="width:36px;height:36px;fill:#059669">${icons.excel}</div><span>Excel</span></div>`;
+                corsImg.src = `https://wsrv.nl/?url=${encodeURIComponent(imgElement.src)}&w=64&h=64&output=png`;
             }
-        } catch(e) {
-            containerElement.innerHTML = `<div class="file-card-preview-placeholder"><div style="width:36px;height:36px;fill:#059669">${icons.excel}</div><span>Excel</span></div>`;
-        }
-    }
-
-    function validateFileFormat(file) {
-        const fileName = file.name.toLowerCase();
-        const validExtensions = ['.pdf', '.jpg', '.jpeg', '.png', '.webp', '.xlsx', '.xls', '.csv', '.docx'];
-        const isValidExt = validExtensions.some(ext => fileName.endsWith(ext));
-        const isValidType = file.type.includes('pdf') || file.type.includes('image') || file.type.includes('sheet') || file.type.includes('excel') || file.type.includes('csv') || file.type.includes('word') || file.type.includes('document');
-        return isValidExt || isValidType;
-    }
-
-    async function previewFile(event) {
-        const file = event.target.files[0];
-        const previewContainer = document.getElementById('uploadPreview');
-
-        if (!file) {
-            previewContainer.innerHTML = '<span class="preview-placeholder">ფაილი არ არის არჩეული</span>';
-            return;
         }
 
-        if (!validateFileFormat(file)) {
-            showToast('ამ ტიპის ფაილის ატვირთვა სისტემაში შეუძლებელია!', 'error');
-            event.target.value = '';
-            previewContainer.innerHTML = '<span class="preview-placeholder">ფაილი არ არის მხარდაჭერილი</span>';
-            return;
-        }
-
-        previewContainer.innerHTML = `
-            <div class="spinner-container" style="min-height: 70px;">
-                <div class="spinner" style="width: 28px; height: 28px; border-width: 3px;"></div>
-                <span style="font-size: 11px;">იტვირთება Preview...</span>
-            </div>
-        `;
-
-        if (file.type.includes('image') || file.name.match(/\.(jpg|jpeg|png|webp)$/i)) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-            }
-            reader.readAsDataURL(file);
-        } else if (file.type.includes('pdf') || file.name.endsWith('.pdf')) {
-            const tempUrl = URL.createObjectURL(file);
-            await renderPdfThumbnail(tempUrl, previewContainer);
-            URL.revokeObjectURL(tempUrl);
-        } else if (file.type.includes('sheet') || file.type.includes('excel') || file.name.match(/\.xls[x]?$|\.csv$/i)) {
-            const tempUrl = URL.createObjectURL(file);
-            await renderExcelThumbnail(tempUrl, previewContainer);
-            URL.revokeObjectURL(tempUrl);
-        } else if (file.type.includes('word') || file.type.includes('document') || file.name.endsWith('.docx')) {
-            previewContainer.innerHTML = `<div class="file-card-preview-placeholder"><div style="width:36px;height:36px;fill:#0284c7">${icons.word}</div><span>Word დოკუმენტი</span></div>`;
-        } else {
-            previewContainer.innerHTML = `<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text);font-weight:500;"><div style="width:24px;height:24px;fill:#4b5563">${icons.file}</div><span>${file.name}</span></div>`;
-        }
-    }
-
-    function renderFiles() {
-        const container = document.getElementById('locationsContainer');
-        container.innerHTML = '';
-
-        const isMobile = window.innerWidth <= 768;
-        const isSearching = searchQuery.trim() !== '';
-
-        const filteredFiles = filesData.filter(file => {
-            const titleMatch = file.title && file.title.toLowerCase().includes(searchQuery);
-            const locMatch = file.location && file.location.toLowerCase().includes(searchQuery);
-            return titleMatch || locMatch;
+        let debounceTimer;
+        logoUrlInput.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            const val = e.target.value.trim();
+            debounceTimer = setTimeout(() => {
+                analyzeLogoAndSetColor(val);
+            }, 350);
         });
 
-        if (filteredFiles.length === 0) {
-            container.innerHTML = `<div class="empty-state">ფაილები ვერ მოიძებნა</div>`;
-            return;
+        function initFirebase() {
+            if (typeof window.onValue === 'undefined') {
+                setTimeout(initFirebase, 100);
+                return;
+            }
+            loadWebsites();
         }
 
-        const grouped = new Map();
-        filteredFiles.forEach((file) => {
-            const loc = file.location || '-';
-            if (!grouped.has(loc)) {
-                grouped.set(loc, []);
+        function loadWebsites() {
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                showLoader('იტვირთება...');
             }
-            grouped.get(loc).push(file);
-        });
-
-        for (const [location, files] of grouped.entries()) {
-            const isOpenOnMobile = !isMobile || (isSearching ? true : mobileOpenCategory === location);
-            const arrowClass = isOpenOnMobile && isMobile ? 'mobile-category-arrow open' : 'mobile-category-arrow';
-            const gridClass = isOpenOnMobile ? 'file-grid' : 'file-grid hidden';
-
-            let sectionHTML = `
-                <div class="location-section">
-                    <div class="location-header" onclick="handleCategoryClick('${escapeHtml(location)}')">
-                        <div class="location-title">
-                            <div style="width:22px;height:22px;display:inline-block;fill:var(--primary);vertical-align:middle;margin-right:4px;">${icons.folder}</div> 
-                            ${location}
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="file-count">${files.length} ფაილი</span>
-                            <svg class="${arrowClass}" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                        </div>
-                    </div>
-                    <div class="${gridClass}">
-            `;
-
-            files.forEach((file) => {
-                const globalIndex = filesData.indexOf(file);
-                let svgIcon = icons.file;
-                let typeClass = 'default';
-                let typeLabel = 'სხვა დოკუმენტი';
-                const previewId = `preview_box_${globalIndex}`;
-
-                if (file.type.includes('image') || file.name.match(/\.(jpg|jpeg|png|webp)$/i)) {
-                    svgIcon = icons.image;
-                    typeClass = 'image';
-                    typeLabel = 'ფოტო';
-                } else if (file.type.includes('pdf') || (file.name && file.name.endsWith('.pdf'))) {
-                    svgIcon = icons.pdf;
-                    typeClass = 'pdf';
-                    typeLabel = 'PDF';
-                } else if (file.type.includes('sheet') || file.type.includes('excel') || (file.name && file.name.match(/\.xls[x]?$|\.csv$/i))) {
-                    svgIcon = icons.excel;
-                    typeClass = 'excel';
-                    typeLabel = 'Excel';
-                } else if (file.type.includes('word') || file.type.includes('document') || (file.name && file.name.endsWith('.docx'))) {
-                    svgIcon = icons.word;
-                    typeClass = 'word';
-                    typeLabel = 'Word';
+            const websitesRef = window.ref(window.db, DB_PATH);
+            window.onValue(websitesRef, (snapshot) => {
+                const data = snapshot.val();
+                websites = [];
+                if (data) {
+                    Object.keys(data).forEach((key) => {
+                        const item = data[key];
+                        if (item && (item.isPortal === true || item.logo)) {
+                            websites.push({ id: key, ...item });
+                        }
+                    });
                 }
+                hideLoader();
+            }, (error) => {
+                hideLoader();
+                console.error(error);
+                showToast('ჩატვირთვის შეცდომა');
+            });
+        }
 
-                sectionHTML += `
-                    <div class="file-card" onclick="openFile(${globalIndex})">
-                        <div class="file-card-preview" id="${previewId}">
-                            <div class="spinner-container" style="min-height: 80px;">
-                                <div class="spinner" style="width: 24px; height: 24px; border-width: 2px;"></div>
+
+        function extractDomain(url) {
+            try {
+                let formatted = url.trim();
+                if (!formatted.startsWith('http://') && !formatted.startsWith('https://')) {
+                    formatted = 'https://' + formatted;
+                }
+                return new URL(formatted).hostname.replace('www.', '');
+            } catch(e) {
+                return '';
+            }
+        }
+
+        autoFetchLogoBtn.addEventListener('click', () => {
+            const domain = extractDomain(websiteUrl.value);
+            if (!domain) {
+                showToast('ჯერ ჩაწერეთ სწორი ვებგვერდის URL');
+                return;
+            }
+            const logoUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+            logoUrlInput.value = logoUrl;
+            analyzeLogoAndSetColor(logoUrl);
+            showToast('ლოგო ამოღებულია!', true);
+        });
+
+        googleSearchLogoBtn.addEventListener('click', () => {
+            const name = websiteName.value.trim() || extractDomain(websiteUrl.value) || 'company';
+            const query = encodeURIComponent(`${name} official logo png transparent`);
+            window.open(`https://www.google.com/search?tbm=isch&q=${query}`, '_blank');
+            showToast('დააკოპირეთ სურათის მისამართი (Copy image address) და ჩასვით ლოგოს ველში', true);
+        });
+
+        logoFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            logoSpinner.style.display = 'block';
+            logoPreviewPlaceholder.style.display = 'none';
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_SIZE = 180;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height && width > MAX_SIZE) {
+                        height *= MAX_SIZE / width;
+                        width = MAX_SIZE;
+                    } else if (height > MAX_SIZE) {
+                        width *= MAX_SIZE / height;
+                        height = MAX_SIZE;
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    const compressedBase64 = canvas.toDataURL('image/png', 0.85);
+                    logoUrlInput.value = compressedBase64;
+                    analyzeLogoAndSetColor(compressedBase64);
+                    showToast('ლოგო აიტვირთა და ფერი შეირჩა!', true);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // ბარათების რენდერი
+        function renderWebsites() {
+            if (!websitesGrid) return;
+            websitesGrid.innerHTML = '';
+
+            websites.forEach((site) => {
+                const card = document.createElement('div');
+                card.className = 'portal-card';
+                
+                // იგივე ფანჯარაში გახსნა
+                card.addEventListener('click', () => {
+                    showLoader(`${site.name} იხსნება...`);
+                    window.location.href = site.url;
+                });
+
+                const domain = extractDomain(site.url);
+                const topBg = site.bgColor || computeFallbackPastel(site.name);
+
+                card.innerHTML = `
+                    <div class="card-top-third" style="background: ${topBg};">
+                        <img src="${site.logo}" alt="${escapeHtml(site.name)}" class="card-logo-img" draggable="false">
+                    </div>
+                    <div class="card-bottom-twothirds">
+                        <div>
+                            <div class="card-title-row">
+                                <h3 class="card-name">${escapeHtml(site.name)}</h3>
+                                <div class="card-go-icon">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
                             </div>
+                            <p class="card-description">${escapeHtml(site.description || 'პირადი კაბინეტი და ონლაინ სერვისები')}</p>
                         </div>
-                        <div class="file-card-footer">
-                            <div class="file-icon-box ${typeClass}">${svgIcon}</div>
-                            <div class="file-info">
-                                <div class="file-title" title="${file.title}">${file.title}</div>
-                                <div class="file-type-label">${typeLabel}</div>
-                            </div>
+                        <div class="card-domain-tag">
+                            <i class="fas fa-globe" style="color: var(--accent);"></i> ${escapeHtml(domain)}
                         </div>
                     </div>
                 `;
+
+                const imgEl = card.querySelector('.card-logo-img');
+                const topThirdEl = card.querySelector('.card-top-third');
+                imgEl.addEventListener('load', () => {
+                    autoTintCardHeader(imgEl, topThirdEl, site.name);
+                });
+
+                websitesGrid.appendChild(card);
             });
-
-            sectionHTML += `</div></div>`;
-            container.innerHTML += sectionHTML;
         }
 
-        filteredFiles.forEach((file) => {
-            const globalIndex = filesData.indexOf(file);
-            const box = document.getElementById(`preview_box_${globalIndex}`);
-            if (!box) return;
+        // 3. დამატება — ლოგოს გარეშე დამატება დაბლოკილია!
+        document.getElementById('addWebsiteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = (websiteName.value || '').trim();
+            let url = (websiteUrl.value || '').trim();
+            const desc = (document.getElementById('websiteDescription').value || '').trim();
+            const logo = (logoUrlInput.value || '').trim();
 
-            if (file.type.includes('image') || file.name.match(/\.(jpg|jpeg|png|webp)$/i)) {
-                box.innerHTML = `<img src="${file.url}" alt="${file.title}">`;
-            } else if (file.type.includes('pdf') || (file.name && file.name.endsWith('.pdf'))) {
-                renderPdfThumbnail(file.url, box);
-            } else if (file.type.includes('sheet') || file.type.includes('excel') || (file.name && file.name.match(/\.xls[x]?$|\.csv$/i))) {
-                renderExcelThumbnail(file.url, box);
-            } else if (file.type.includes('word') || file.type.includes('document') || (file.name && file.name.endsWith('.docx'))) {
-                box.innerHTML = `<div class="file-card-preview-placeholder"><div style="width:36px;height:36px;fill:#0284c7">${icons.word}</div><span>Word</span></div>`;
-            } else {
-                box.innerHTML = `<div class="file-card-preview-placeholder"><div style="width:36px;height:36px;fill:#4b5563">${icons.file}</div><span>ფაილი</span></div>`;
-            }
-        });
-    }
-
-    function getExcelColumnName(n) {
-        let name = '';
-        for (let i = n + 1; i > 0; i = Math.floor((i - 1) / 26)) {
-            name = String.fromCharCode(65 + ((i - 1) % 26)) + name;
-        }
-        return name;
-    }
-
-    async function openFile(index) {
-        const file = filesData[index];
-        currentActiveFile = file;
-        currentZoom = 1;
-        currentDocumentKind = null;
-        activeExcelWorkbook = null;
-        activeExcelSheetName = '';
-        cleanupPdfViewer();
-        closeDownloadOptions();
-        hidePageJump();
-
-        const modal = document.getElementById('fileModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalBody = document.getElementById('modalBody');
-        const pageInfo = document.getElementById('pageInfo');
-        const zoomLabel = document.getElementById('zoomLabel');
-        const excelSearchContainer = document.getElementById('excelSearchContainer');
-        const generalPageInfoGroup = document.getElementById('generalPageInfoGroup');
-        const zoomGroup = document.getElementById('zoomGroup');
-
-        modalBody.className = 'modal-body';
-        modalTitle.textContent = file.title;
-        zoomLabel.textContent = '100%';
-        excelSearchContainer.style.display = 'none';
-        generalPageInfoGroup.style.display = 'flex';
-        zoomGroup.style.display = 'flex';
-        pageInfo.textContent = file.name || 'დოკუმენტი';
-
-        modalBody.innerHTML = `
-            <div class="spinner-container">
-                <div class="spinner"></div>
-                <span>იტვირთება დოკუმენტი...</span>
-            </div>
-        `;
-        modal.style.display = 'flex';
-
-        setTimeout(async () => {
-            try {
-                if (isWordFile(file)) {
-                    currentDocumentKind = 'word';
-                    setModalBodyMode('word');
-                    const buffer = await fetchFileArrayBuffer(file.url);
-                    modalBody.innerHTML = `
-                        <div class="word-viewer-shell">
-                            <div id="zoomableContent" class="word-render-container"></div>
-                        </div>
-                    `;
-
-                    const wordContainer = document.getElementById('zoomableContent');
-                    if (window.docx && typeof window.docx.renderAsync === 'function') {
-                        await window.docx.renderAsync(buffer, wordContainer, null, {
-                            className: 'docx',
-                            inWrapper: true,
-                            breakPages: true,
-                            renderHeaders: true,
-                            renderFooters: true,
-                            useBase64URL: true
-                        });
-                    } else {
-                        const result = await mammoth.convertToHtml({ arrayBuffer: buffer });
-                        wordContainer.innerHTML = `<section class="docx" style="background:white;padding:2.5cm;max-width:21cm;width:100%;min-height:29.7cm;color:#000;line-height:1.6;">${result.value}</section>`;
-                    }
-
-                    const pages = getWordPages();
-                    setupPageJump(pages.length, (pageNumber) => {
-                        const page = getWordPages()[pageNumber - 1];
-                        if (page) page.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    });
-                    pageInfo.textContent = `${file.name} (Word — ${pages.length} გვერდი)`;
-                    return;
-                }
-
-                if (isExcelFile(file)) {
-                    currentDocumentKind = 'excel';
-                    setModalBodyMode('excel');
-                    excelSearchContainer.style.display = 'flex';
-                    document.getElementById('excelSearchInput').value = '';
-
-                    const { workbook, firstSheetName, jsonData } = await readExcelDataFromUrl(file.url);
-                    activeExcelWorkbook = workbook;
-                    activeExcelSheetName = firstSheetName;
-                    modalBody.innerHTML = `<div class="excel-table-container">${buildExcelTableHtml(jsonData)}</div>`;
-                    pageInfo.textContent = `${file.name} (Excel ცხრილი)`;
-                    return;
-                }
-
-                if (isImageFile(file)) {
-                    modalBody.innerHTML = `<img src="${file.url}" alt="${escapeHtml(file.title)}" id="zoomableContent" style="cursor: zoom-in;">`;
-                    pageInfo.textContent = `${file.name} (სურათი)`;
-
-                    const imgElem = document.getElementById('zoomableContent');
-                    imgElem.addEventListener('wheel', (e) => {
-                        e.preventDefault();
-                        if (e.deltaY < 0) {
-                            zoomFile(0.1);
-                        } else {
-                            zoomFile(-0.1);
-                        }
-                    }, { passive: false });
-                    return;
-                }
-
-                if (isPdfFile(file)) {
-                    currentDocumentKind = 'pdf';
-                    setModalBodyMode('pdf');
-
-                    const buffer = await fetchFileArrayBuffer(file.url);
-
-                    try {
-                        const loadingTask = pdfjsLib.getDocument({ data: buffer });
-                        activePdfDoc = await loadingTask.promise;
-                        const numPages = activePdfDoc.numPages;
-
-                        modalBody.innerHTML = `<div id="zoomableContent" class="pdf-viewer" aria-label="${escapeHtml(file.title || file.name || 'PDF')}"></div>`;
-                        createPdfPageShells(numPages);
-                        setupPdfLazyRendering();
-                        setupPageJump(numPages, async (pageNumber) => {
-                            setPageJumpValue(pageNumber);
-                            const pageShell = getPdfPageShell(pageNumber);
-                            if (pageShell) pageShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            await renderPdfPage(pageNumber);
-                        });
-                        pageInfo.textContent = `${file.name} (PDF — ${numPages} გვერდი)`;
-                    } catch (err) {
-                        modalBody.innerHTML = '<div style="color: #ef4444; font-weight: 500; padding: 24px;">PDF ფაილის გახსნა ვერ მოხერხდა.</div>';
-                        showToast('PDF ფაილის გახსნის შეცდომა', 'error');
-                    }
-                    return;
-                }
-
-                const iframe = document.createElement('iframe');
-                iframe.src = file.url;
-                iframe.id = 'zoomableContent';
-                iframe.style.width = '100%';
-                iframe.style.height = '100%';
-                iframe.style.border = 'none';
-                modalBody.innerHTML = '';
-                modalBody.appendChild(iframe);
-
-            } catch (error) {
-                modalBody.innerHTML = '<div style="color: #ef4444; font-weight: 500;">ფაილის გახსნა ვერ მოხერხდა.</div>';
-                showToast('ფაილის გახსნის შეცდომა', 'error');
-            }
-        }, 300);
-    }
-
-    function handleExcelSearch(event) {
-        const query = event.target.value.toLowerCase().trim();
-        const table = document.querySelector('#zoomableContent');
-        if (!table) return;
-        const rows = table.querySelectorAll('tr');
-        rows.forEach((row, index) => {
-            if (index === 0) return;
-            const text = row.textContent.toLowerCase();
-            if (query === '' || text.includes(query)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
-
-    function zoomFile(delta) {
-        currentZoom = Math.max(0.5, Math.min(3.0, currentZoom + delta));
-        document.getElementById('zoomLabel').textContent = Math.round(currentZoom * 100) + '%';
-
-        const content = document.getElementById('zoomableContent');
-        if (!content) return;
-
-        if (currentDocumentKind === 'excel') {
-            content.style.fontSize = `${13 * currentZoom}px`;
-            content.style.transform = 'none';
-            return;
-        }
-
-        if (currentDocumentKind === 'pdf') {
-            rerenderPdfVisiblePages();
-            return;
-        }
-
-        if (content) {
-            content.style.transform = `scale(${currentZoom})`;
-            content.style.transformOrigin = 'top center';
-        }
-    }
-
-    function downloadCurrentFile(event) {
-        if (!currentActiveFile) return;
-        if (event) event.stopPropagation();
-
-        if (isExcelFile(currentActiveFile)) {
-            document.getElementById('downloadOptionsMenu')?.classList.toggle('show');
-            return;
-        }
-
-        const a = document.createElement('a');
-        a.href = currentActiveFile.url;
-        a.target = '_blank';
-        a.download = currentActiveFile.name || currentActiveFile.title;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        showToast('ფაილი გადმოიწერა', 'success');
-    }
-
-    async function getActiveExcelData() {
-        if (!currentActiveFile || !isExcelFile(currentActiveFile)) return null;
-        return await readExcelDataFromUrl(currentActiveFile.url);
-    }
-
-    async function downloadExcelAsPdf() {
-        if (!currentActiveFile || !isExcelFile(currentActiveFile)) return;
-        closeDownloadOptions();
-
-        if (!window.html2canvas || !window.jspdf?.jsPDF) {
-            showToast('PDF ექსპორტის ბიბლიოთეკა ვერ ჩაიტვირთა', 'error');
-            return;
-        }
-
-        const table = document.querySelector('table.excel-rendered');
-        if (!table) {
-            showToast('Excel ცხრილი ჯერ არ არის გახსნილი', 'error');
-            return;
-        }
-
-        try {
-            showToast('PDF მზადდება...', 'success');
-            const previousTransform = table.style.transform;
-            table.style.transform = 'none';
-
-            const canvas = await html2canvas(table, {
-                backgroundColor: '#ffffff',
-                scale: 2,
-                useCORS: true,
-                scrollX: 0,
-                scrollY: 0,
-                windowWidth: table.scrollWidth,
-                windowHeight: table.scrollHeight
-            });
-            table.style.transform = previousTransform;
-
-            const { jsPDF } = window.jspdf;
-            const orientation = canvas.width > canvas.height ? 'landscape' : 'portrait';
-            const pdf = new jsPDF({ orientation, unit: 'pt', format: 'a4' });
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const margin = 24;
-            const printableWidth = pageWidth - margin * 2;
-            const printableHeight = pageHeight - margin * 2;
-            const ratio = canvas.width / printableWidth;
-            const sliceHeight = Math.floor(printableHeight * ratio);
-
-            let offsetY = 0;
-            let pageIndex = 0;
-            while (offsetY < canvas.height) {
-                const pageCanvas = document.createElement('canvas');
-                const currentSliceHeight = Math.min(sliceHeight, canvas.height - offsetY);
-                pageCanvas.width = canvas.width;
-                pageCanvas.height = currentSliceHeight;
-                const context = pageCanvas.getContext('2d');
-                context.fillStyle = '#ffffff';
-                context.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-                context.drawImage(canvas, 0, offsetY, canvas.width, currentSliceHeight, 0, 0, canvas.width, currentSliceHeight);
-
-                if (pageIndex > 0) pdf.addPage();
-                const imgData = pageCanvas.toDataURL('image/png');
-                const imgHeight = currentSliceHeight / ratio;
-                pdf.addImage(imgData, 'PNG', margin, margin, printableWidth, imgHeight);
-                offsetY += currentSliceHeight;
-                pageIndex++;
-            }
-
-            pdf.save(`${getSafeBaseName(currentActiveFile)}.pdf`);
-            showToast('PDF ფაილი გადმოიწერა', 'success');
-        } catch (error) {
-            showToast('PDF ექსპორტი ვერ მოხერხდა', 'error');
-        }
-    }
-
-    async function downloadExcelAsWorkbook() {
-        const excelData = await getActiveExcelData();
-        if (!excelData) return;
-        closeDownloadOptions();
-
-        const output = XLSX.write(excelData.workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([output], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        downloadBlob(blob, `${getSafeBaseName(currentActiveFile)}.xlsx`);
-        showToast('Excel ფაილი გადმოიწერა', 'success');
-    }
-
-    async function downloadExcelAsCsv() {
-        const excelData = await getActiveExcelData();
-        if (!excelData) return;
-        closeDownloadOptions();
-
-        const csv = XLSX.utils.sheet_to_csv(excelData.worksheet);
-        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-        downloadBlob(blob, `${getSafeBaseName(currentActiveFile)}.csv`);
-        showToast('CSV ფაილი გადმოიწერა', 'success');
-    }
-
-    function printCurrentFile() {
-        if (!currentActiveFile) return;
-        try {
-            const isExcel = isExcelFile(currentActiveFile);
-            if (isExcel) {
-                const tableHtml = document.querySelector('#zoomableContent')?.outerHTML || '';
-                let printFrame = document.getElementById('printFrame');
-                if (!printFrame) {
-                    printFrame = document.createElement('iframe');
-                    printFrame.id = 'printFrame';
-                    printFrame.style.display = 'none';
-                    document.body.appendChild(printFrame);
-                }
-                const doc = printFrame.contentWindow.document;
-                doc.open();
-                doc.write(`
-                    <html>
-                    <head>
-                        <title></title>
-                        <style>
-                            body { font-family: 'Inter', sans-serif; padding: 20px; color: #000; }
-                            table { width: 100%; border-collapse: collapse !important; font-size: 13px; }
-                            th, td { border: 1px solid #000 !important; padding: 8px 12px; text-align: left; }
-                            th, td.excel-row-header { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; }
-                        </style>
-                    </head>
-                    <body>
-                        ${tableHtml}
-                    </body>
-                    </html>
-                `);
-                doc.close();
-                printFrame.contentWindow.focus();
-                setTimeout(() => {
-                    printFrame.contentWindow.print();
-                }, 500);
+            if (!name || !url) {
+                showToast('გთხოვთ შეავსოთ სახელი და ვებგვერდის URL');
                 return;
             }
 
-            const isWord = isWordFile(currentActiveFile);
-            if (isWord) {
-                const wordHtml = document.querySelector('#zoomableContent')?.innerHTML || '';
-                let printFrame = document.getElementById('printFrame');
-                if (!printFrame) {
-                    printFrame = document.createElement('iframe');
-                    printFrame.id = 'printFrame';
-                    printFrame.style.display = 'none';
-                    document.body.appendChild(printFrame);
-                }
-                const doc = printFrame.contentWindow.document;
-                doc.open();
-                doc.write(`
-                    <html>
-                    <head>
-                        <title>${currentActiveFile.title}</title>
-                        <style>
-                            body { font-family: 'Inter', sans-serif; padding: 40px; color: #000; line-height: 1.6; }
-                            h1, h2, h3 { margin-bottom: 10px; }
-                            p { margin-bottom: 12px; }
-                        </style>
-                    </head>
-                    <body>
-                        <h2>${currentActiveFile.title}</h2>
-                        ${wordHtml}
-                    </body>
-                    </html>
-                `);
-                doc.close();
-                printFrame.contentWindow.focus();
-                setTimeout(() => {
-                    printFrame.contentWindow.print();
-                }, 500);
+            // სავალდებულო ლოგოს შემოწმება
+            if (!logo || !isLogoValid) {
+                showToast('ლოგოს გარეშე გვერდი ვერ დაემატება! გთხოვთ მიუთითოთ ან ატვირთოთ ლოგო.');
                 return;
             }
 
-            const isImage = isImageFile(currentActiveFile);
-            if (isImage) {
-                let printFrame = document.getElementById('printFrame');
-                if (!printFrame) {
-                    printFrame = document.createElement('iframe');
-                    printFrame.id = 'printFrame';
-                    printFrame.style.display = 'none';
-                    document.body.appendChild(printFrame);
-                }
-                const doc = printFrame.contentWindow.document;
-                doc.open();
-                doc.write(`
-                    <html>
-                    <head>
-                        <title>${currentActiveFile.title}</title>
-                        <style>
-                            body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #fff; }
-                            img { max-width: 100%; max-height: 100%; object-fit: contain; }
-                        </style>
-                    </head>
-                    <body>
-                        <img src="${currentActiveFile.url}">
-                    </body>
-                    </html>
-                `);
-                doc.close();
-                printFrame.contentWindow.focus();
-                setTimeout(() => {
-                    printFrame.contentWindow.print();
-                }, 500);
-                return;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
             }
 
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = currentActiveFile.url;
-            document.body.appendChild(iframe);
-            iframe.onload = function() {
-                setTimeout(() => {
-                    iframe.contentWindow.focus();
-                    iframe.contentWindow.print();
-                    document.body.removeChild(iframe);
-                }, 500);
+            const payload = {
+                name: name,
+                url: url,
+                description: desc || '',
+                logo: logo,
+                bgColor: autoDetectedBgColor || computeFallbackPastel(name),
+                isPortal: true
             };
-        } catch(e) {
-            showToast('ბეჭდვა ვერ მოხერხდა', 'error');
+
+            try {
+                showLoader('ინახება...');
+                await window.push(window.ref(window.db, DB_PATH), payload);
+                hideLoader();
+                showToast('პორტალი წარმატებით დაემატა!', true);
+                document.getElementById('addWebsiteForm').reset();
+                analyzeLogoAndSetColor('');
+                closeMainModal();
+            } catch (err) {
+                hideLoader();
+                console.error("Firebase write error:", err);
+                showToast('შეცდომა შენახვისას');
+            }
+        });
+
+        // წაშლის სია
+        function renderDeleteWebsiteList() {
+            deleteWebsiteList.innerHTML = websites.length ? '' : '<p style="text-align:center; padding:20px; color:var(--text-muted);">სია ცარიელია</p>';
+            
+            websites.forEach(site => {
+                const item = document.createElement('div');
+                item.className = 'action-item';
+                item.innerHTML = `
+                    <div class="action-item-info">
+                        <img src="${site.logo || ''}" class="action-logo-img" style="background: ${site.bgColor || '#f8fafc'};" alt="" draggable="false">
+                        <div class="action-text">
+                            <h4>${escapeHtml(site.name)}</h4>
+                            <p>${escapeHtml(site.url)}</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger" style="padding: 7px 14px; font-size: 0.8rem;">
+                        <i class="fas fa-trash"></i> წაშლა
+                    </button>
+                `;
+
+                item.querySelector('button').addEventListener('click', () => {
+                    document.getElementById('confirmationMessage').textContent = `ნამდვილად გსურთ "${site.name}"-ის წაშლა?`;
+                    confirmationModal.style.display = 'flex';
+                    setTimeout(() => confirmationModal.classList.add('active'), 10);
+
+                    const confirmHandler = async () => {
+                        try {
+                            showLoader('იშლება...');
+                            await window.remove(window.ref(window.db, `${DB_PATH}/${site.id}`));
+                            hideLoader();
+                            showToast('წაიშალა წარმატებით', true);
+                            closeConfirm();
+                        } catch(e) {
+                            hideLoader();
+                            showToast('შეცდომა წაშლისას');
+                        }
+                    };
+
+                    const closeConfirm = () => {
+                        confirmationModal.classList.remove('active');
+                        setTimeout(() => confirmationModal.style.display = 'none', 250);
+                        document.getElementById('confirmBtn').removeEventListener('click', confirmHandler);
+                    };
+
+                    document.getElementById('confirmBtn').onclick = confirmHandler;
+                    document.getElementById('cancelConfirmBtn').onclick = closeConfirm;
+                });
+
+                deleteWebsiteList.appendChild(item);
+            });
         }
-    }
 
-    function confirmDeleteFile() {
-        if (!currentActiveFile) return;
-        document.getElementById('deleteConfirmText').textContent = `ნამდვილად გსურთ ფაილის („${currentActiveFile.title}“) წაშლა?`;
-        document.getElementById('deleteConfirmModal').style.display = 'flex';
-    }
+        // რედაქტირების სია
+        function renderEditWebsiteList() {
+            editWebsiteList.innerHTML = websites.length ? '' : '<p style="text-align:center; padding:20px; color:var(--text-muted);">სია ცარიელია</p>';
 
-    function closeDeleteConfirm() {
-        document.getElementById('deleteConfirmModal').style.display = 'none';
-    }
+            websites.forEach(site => {
+                const item = document.createElement('div');
+                item.className = 'action-item';
+                item.innerHTML = `
+                    <div class="action-item-info">
+                        <img src="${site.logo || ''}" class="action-logo-img" style="background: ${site.bgColor || '#f8fafc'};" alt="" draggable="false">
+                        <div class="action-text">
+                            <h4>${escapeHtml(site.name)}</h4>
+                            <p>${escapeHtml(site.url)}</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline" style="padding: 7px 14px; font-size: 0.8rem;">
+                        <i class="fas fa-pen"></i> შეცვლა
+                    </button>
+                `;
 
-    async function executeDeleteFile() {
-        if (!currentActiveFile) return;
-        const fileId = currentActiveFile.id;
-        closeDeleteConfirm();
+                item.querySelector('button').addEventListener('click', () => {
+                    currentEditingId = site.id;
+                    document.getElementById('editNameInput').value = site.name || '';
+                    document.getElementById('editUrlInput').value = site.url || '';
+                    document.getElementById('editLogoInput').value = site.logo || '';
+                    document.getElementById('editDescriptionInput').value = site.description || '';
 
-        const { error } = await supabaseClient.from('files').delete().eq('id', fileId);
-        if (error) {
-            showToast('წაშლის შეცდომა', 'error');
-        } else {
-            closeModal();
-            showToast('ფაილი წარმატებით წაიშალა', 'success');
+                    editDescModal.style.display = 'flex';
+                    setTimeout(() => editDescModal.classList.add('active'), 10);
+                });
+
+                editWebsiteList.appendChild(item);
+            });
         }
-    }
 
-    function closeModal() {
-        const modal = document.getElementById('fileModal');
-        modal.style.display = 'none';
-        const modalBody = document.getElementById('modalBody');
-        modalBody.innerHTML = '';
-        modalBody.className = 'modal-body';
-        currentActiveFile = null;
-        currentDocumentKind = null;
-        currentZoom = 1;
-        activeExcelWorkbook = null;
-        activeExcelSheetName = '';
-        cleanupPdfViewer();
-        hidePageJump();
-        closeDownloadOptions();
-    }
-</script>
+        window.closeEditDescModal = function() {
+            editDescModal.classList.remove('active');
+            setTimeout(() => { editDescModal.style.display = 'none'; }, 250);
+            currentEditingId = null;
+        };
 
+        document.getElementById('saveEditDescBtn').addEventListener('click', async () => {
+            if (!currentEditingId) return;
+
+            const name = document.getElementById('editNameInput').value.trim();
+            let url = document.getElementById('editUrlInput').value.trim();
+            const logo = document.getElementById('editLogoInput').value.trim();
+            const desc = document.getElementById('editDescriptionInput').value.trim();
+
+            if (!name || !url || !logo) {
+                showToast('სახელი, URL და ლოგო სავალდებულოა!');
+                return;
+            }
+
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+
+            try {
+                showLoader('განახლება...');
+                const existing = websites.find(w => w.id === currentEditingId);
+                const bgColor = (existing && existing.logo === logo) ? existing.bgColor : computeFallbackPastel(name);
+
+                await window.set(window.ref(window.db, `${DB_PATH}/${currentEditingId}`), {
+                    name, url, logo, bgColor, description: desc, isPortal: true
+                });
+                hideLoader();
+                showToast('მონაცემები განახლდა!', true);
+                closeEditDescModal();
+            } catch(e) {
+                hideLoader();
+                showToast('შეცდომა განახლებისას');
+            }
+        });
+
+        // ავტორიზაცია
+        function showProtectedContent() {
+            loginWrapper.style.display = 'none';
+            particlesBg.classList.add('hidden');
+            mainHeader.style.display = 'flex';
+            protectedContent.style.display = 'block';
+            renderWebsites();
+        }
+
+        function showLoginForm() {
+            loginWrapper.style.display = 'flex';
+            particlesBg.classList.remove('hidden');
+            mainHeader.style.display = 'none';
+            protectedContent.style.display = 'none';
+            usernameInput.value = 'alex';
+            passwordInput.value = '';
+            // ველოდებით კონტეინერის გამოჩენას და ვრთავთ Particles.js-ს
+            setTimeout(() => {
+                initParticles();
+                window.dispatchEvent(new Event('resize'));
+            }, 50);
+        }
+
+        loginBtn.addEventListener('click', () => {
+            if (usernameInput.value.trim() === correctUsername && passwordInput.value.trim() === correctPassword) {
+                showLoader('იტვირთება...');
+                setTimeout(() => {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    hideLoader();
+                    showProtectedContent();
+                    showToast('ავტორიზაცია წარმატებულია', true);
+                }, 350);
+            } else {
+                showToast('არასწორი მომხმარებელი ან პაროლი');
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('isLoggedIn');
+            showLoginForm();
+        });
+
+        openPanelBtn.addEventListener('click', () => {
+            mainModal.style.display = 'flex';
+            setTimeout(() => mainModal.classList.add('active'), 10);
+            renderDeleteWebsiteList();
+            renderEditWebsiteList();
+        });
+
+        function closeMainModal() {
+            mainModal.classList.remove('active');
+            setTimeout(() => { mainModal.style.display = 'none'; }, 250);
+        }
+        closeModalBtn.addEventListener('click', closeMainModal);
+
+        document.querySelectorAll('.modal-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+            });
+        });
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
+
+        function showToast(message, isSuccess = false) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${isSuccess ? 'success' : ''}`;
+            toast.innerHTML = `
+                <i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 250);
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
