@@ -162,7 +162,6 @@
             transform: scale(0.98);
         }
 
-        /* 7. შეცვლილი სერვისების პორტალის SVG */
         .brand-icon {
             width: 44px;
             height: 44px;
@@ -191,12 +190,6 @@
             font-weight: 700;
             color: var(--text-main);
             letter-spacing: -0.3px;
-        }
-
-        .header-brand p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 2px;
         }
 
         .header-actions {
@@ -304,6 +297,16 @@
             transition: opacity 0.25s ease;
         }
 
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1.5px dashed var(--border);
+            border-radius: 22px;
+            color: var(--text-muted);
+        }
+
         .portal-card {
             background: var(--surface);
             border-radius: 22px;
@@ -342,7 +345,6 @@
             -webkit-user-select: none;
         }
 
-        /* 6. ლოგოს ფოტო არ ინიშნება და არ გადაადგილდება */
         .card-logo-img {
             max-height: 54px;
             max-width: 75%;
@@ -648,10 +650,8 @@
 </head>
 <body>
 
-    <!-- 1. ღია ფონი + Particles.js -->
     <div id="particles-js"></div>
 
-    <!-- 2. Loading Circle Overlay -->
     <div class="loading-overlay" id="globalLoader">
         <div class="spinner"></div>
         <div class="loading-text" id="loaderText">იტვირთება...</div>
@@ -720,7 +720,7 @@
                 <button class="modal-tab" data-tab="edit-tab"><i class="fas fa-pen"></i> რედაქტირება</button>
             </div>
 
-            <!-- დამატება (შაბლონების გარეშე, ავტომატური ფერით და სავალდებულო ლოგოთი) -->
+            <!-- დამატება -->
             <div class="tab-content active" id="add-tab">
                 <form id="addWebsiteForm">
                     <div class="form-row">
@@ -740,9 +740,8 @@
                         </div>
                     </div>
 
-                    <!-- ლოგო (სავალდებულო) და მისი ავტომატური ფონი -->
                     <div class="form-group">
-                        <label class="form-label">ლოგო<span style="font-weight: 400; color: var(--text-muted); font-size: 0.78rem;"></span></label>
+                        <label class="form-label">ლოგო</label>
                         <div class="logo-box">
                             <div class="logo-preview-square" id="logoPreviewBox">
                                 <div class="spinner-sm" id="logoSpinner"></div>
@@ -795,10 +794,8 @@
 
     <!-- მთავარი აპლიკაცია -->
     <div class="app-container">
-        <!-- ჰედერი -->
         <header id="mainHeader" style="display: none;">
             <div class="header-brand" id="refreshBrandBtn" title="განახლება">
-                <!-- 7. ახალი სერვისების პორტალის ვექტორული SVG -->
                 <div class="brand-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
@@ -855,7 +852,12 @@
     <script>
         const correctUsername = 'alex';
         const correctPassword = '2911';
-        const DB_PATH = 'websites';
+        
+        /*
+         * ცალკე ბილიკი 'portals', რომ ძველ საიტს ('websites') საერთოდ არ შეეხოს!
+         * (Firebase Console -> Realtime Database -> Rules-ში ჩაწერეთ ".read": true, ".write": true)
+         */
+        const DB_PATH = 'portals';
 
         let websites = [];
         let currentEditingId = null;
@@ -904,7 +906,6 @@
             globalLoader.classList.remove('active');
         }
 
-        // 1. Particles.js ინიციალიზაცია ხილულ კონტეინერზე
         function initParticles() {
             if (window.particlesJS && !particlesInitialized) {
                 particlesInitialized = true;
@@ -913,14 +914,8 @@
                         "number": { "value": 75, "density": { "enable": true, "value_area": 800 } },
                         "color": { "value": ["#2563eb", "#4f46e5", "#0ea5e9"] },
                         "shape": { "type": "circle" },
-                        "opacity": {
-                            "value": 0.55,
-                            "random": false
-                        },
-                        "size": {
-                            "value": 4,
-                            "random": true
-                        },
+                        "opacity": { "value": 0.55, "random": false },
+                        "size": { "value": 4, "random": true },
                         "line_linked": {
                             "enable": true,
                             "distance": 150,
@@ -965,7 +960,6 @@
             initFirebase();
         });
 
-        // 3. „სერვისების პორტალი“-ზე დაჭერით განახლება + Loading Circle
         refreshBrandBtn.addEventListener('click', () => {
             refreshBrandBtn.classList.add('refreshing');
             showLoader('მიმდინარეობს განახლება...');
@@ -977,7 +971,6 @@
             }, 400);
         });
 
-        // 5. ლოგოს ფერის 100% ავტომატური ამოცნობა (Canvas + CORS Proxy fallback + ჰეშ-ფერი)
         function computeFallbackPastel(str) {
             const pastelPalette = [
                 '#e6f4ea', '#e0e7ff', '#fef3c7', '#fee2e2',
@@ -1003,7 +996,6 @@
                 for (let i = 0; i < data.length; i += 4) {
                     const alpha = data[i + 3];
                     const pr = data[i], pg = data[i + 1], pb = data[i + 2];
-                    // გამოვრიცხოთ თეთრი, შავი და გამჭვირვალე პიქსელები
                     const isWhite = (pr > 235 && pg > 235 && pb > 235);
                     const isBlack = (pr < 25 && pg < 25 && pb < 25);
                     if (alpha > 120 && !isWhite && !isBlack) {
@@ -1015,15 +1007,12 @@
                     r = Math.round(r / count);
                     g = Math.round(g / count);
                     b = Math.round(b / count);
-                    // 16% ლოგოს ფერი + 84% თეთრი — რბილი პასტელური ფონისთვის
                     const pastelR = Math.round(r * 0.16 + 255 * 0.84);
                     const pastelG = Math.round(g * 0.16 + 255 * 0.84);
                     const pastelB = Math.round(b * 0.16 + 255 * 0.84);
                     return "#" + ((1 << 24) + (pastelR << 16) + (pastelG << 8) + pastelB).toString(16).slice(1);
                 }
-            } catch (e) {
-                // CORS შეზღუდვა
-            }
+            } catch (e) {}
             return computeFallbackPastel(fallbackSeed || imgEl.src || 'portal');
         }
 
@@ -1041,7 +1030,6 @@
             logoPreviewPlaceholder.style.display = 'none';
             logoPreviewImg.style.display = 'none';
 
-            // ვამოწმებთ სურათის ჩატვირთვას
             const displayImg = new Image();
             displayImg.onload = () => {
                 isLogoValid = true;
@@ -1049,12 +1037,10 @@
                 logoPreviewImg.src = src;
                 logoPreviewImg.style.display = 'block';
 
-                // თუ Base64-ია, პირდაპირ ვიღებთ ფერს
                 if (src.startsWith('data:')) {
                     autoDetectedBgColor = extractDominantPastelFromImage(displayImg, websiteName.value);
                     logoPreviewBox.style.background = autoDetectedBgColor;
                 } else {
-                    // გარე URL-ისთვის ვცდილობთ CORS-ით წაკითხვას ფერის ზუსტი ამოღებისთვის
                     const corsImg = new Image();
                     corsImg.crossOrigin = 'Anonymous';
                     corsImg.onload = () => {
@@ -1080,7 +1066,6 @@
             displayImg.src = src;
         }
 
-        // ავტომატური ფერის გენერაცია ბარათის რენდერის დროსაც (თუ ბაზაში ფერი არ წერია ან გარე ბმულია)
         function autoTintCardHeader(imgElement, headerElement, seedText) {
             const corsImg = new Image();
             corsImg.crossOrigin = 'Anonymous';
@@ -1115,6 +1100,7 @@
             loadWebsites();
         }
 
+        // 2. Default საიტები სრულად მოშორებულია — იტვირთება მხოლოდ თქვენი დამატებული პორტალები
         function loadWebsites() {
             if (localStorage.getItem('isLoggedIn') === 'true') {
                 showLoader('იტვირთება...');
@@ -1126,28 +1112,23 @@
                 if (data) {
                     Object.keys(data).forEach((key) => {
                         const item = data[key];
-                        if (item && (item.isPortal === true || item.logo)) {
+                        if (item && item.logo) {
                             websites.push({ id: key, ...item });
                         }
                     });
                 }
                 hideLoader();
-                if (websites.length === 0) {
-                    createDefaultPortals();
-                } else {
-                    renderWebsites();
-                    if (mainModal.classList.contains('active')) {
-                        renderDeleteWebsiteList();
-                        renderEditWebsiteList();
-                    }
+                renderWebsites();
+                if (mainModal.classList.contains('active')) {
+                    renderDeleteWebsiteList();
+                    renderEditWebsiteList();
                 }
             }, (error) => {
                 hideLoader();
                 console.error(error);
-                showToast('ჩატვირთვის შეცდომა');
+                showToast('ბაზასთან წვდომისთვის განაახლეთ Firebase Rules (.read: true, .write: true)');
             });
         }
-
 
         function extractDomain(url) {
             try {
@@ -1218,16 +1199,25 @@
             reader.readAsDataURL(file);
         });
 
-        // ბარათების რენდერი
         function renderWebsites() {
             if (!websitesGrid) return;
             websitesGrid.innerHTML = '';
+
+            if (websites.length === 0) {
+                websitesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open" style="font-size: 2.2rem; margin-bottom: 12px; color: #94a3b8;"></i>
+                        <p style="font-size: 0.95rem; font-weight: 500;">პორტალები ჯერ არ არის დამატებული</p>
+                        <p style="font-size: 0.82rem; margin-top: 4px;">დააჭირეთ ღილაკს „მართვა“ ახალი გვერდის დასამატებლად</p>
+                    </div>
+                `;
+                return;
+            }
 
             websites.forEach((site) => {
                 const card = document.createElement('div');
                 card.className = 'portal-card';
                 
-                // იგივე ფანჯარაში გახსნა
                 card.addEventListener('click', () => {
                     showLoader(`${site.name} იხსნება...`);
                     window.location.href = site.url;
@@ -1248,7 +1238,7 @@
                                     <i class="fas fa-chevron-right"></i>
                                 </div>
                             </div>
-                            <p class="card-description">${escapeHtml(site.description || 'პირადი კაბინეტი და ონლაინ სერვისები')}</p>
+                            <p class="card-description">${escapeHtml(site.description || '')}</p>
                         </div>
                         <div class="card-domain-tag">
                             <i class="fas fa-globe" style="color: var(--accent);"></i> ${escapeHtml(domain)}
@@ -1266,7 +1256,6 @@
             });
         }
 
-        // 3. დამატება — ლოგოს გარეშე დამატება დაბლოკილია!
         document.getElementById('addWebsiteForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = (websiteName.value || '').trim();
@@ -1279,7 +1268,6 @@
                 return;
             }
 
-            // სავალდებულო ლოგოს შემოწმება
             if (!logo || !isLogoValid) {
                 showToast('ლოგოს გარეშე გვერდი ვერ დაემატება! გთხოვთ მიუთითოთ ან ატვირთოთ ლოგო.');
                 return;
@@ -1294,8 +1282,7 @@
                 url: url,
                 description: desc || '',
                 logo: logo,
-                bgColor: autoDetectedBgColor || computeFallbackPastel(name),
-                isPortal: true
+                bgColor: autoDetectedBgColor || computeFallbackPastel(name)
             };
 
             try {
@@ -1313,7 +1300,6 @@
             }
         });
 
-        // წაშლის სია
         function renderDeleteWebsiteList() {
             deleteWebsiteList.innerHTML = websites.length ? '' : '<p style="text-align:center; padding:20px; color:var(--text-muted);">სია ცარიელია</p>';
             
@@ -1365,7 +1351,6 @@
             });
         }
 
-        // რედაქტირების სია
         function renderEditWebsiteList() {
             editWebsiteList.innerHTML = websites.length ? '' : '<p style="text-align:center; padding:20px; color:var(--text-muted);">სია ცარიელია</p>';
 
@@ -1429,7 +1414,7 @@
                 const bgColor = (existing && existing.logo === logo) ? existing.bgColor : computeFallbackPastel(name);
 
                 await window.set(window.ref(window.db, `${DB_PATH}/${currentEditingId}`), {
-                    name, url, logo, bgColor, description: desc, isPortal: true
+                    name, url, logo, bgColor, description: desc
                 });
                 hideLoader();
                 showToast('მონაცემები განახლდა!', true);
@@ -1440,40 +1425,6 @@
             }
         });
 
-        async function createDefaultPortals() {
-            const defaults = [
-                {
-                    name: 'Meine AOK',
-                    url: 'https://meine.aok.de',
-                    description: 'AOK ჯანმრთელობის დაზღვევის პირადი კაბინეტი და ონლაინ სერვისები.',
-                    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/AOK-Logo.svg/1200px-AOK-Logo.svg.png',
-                    bgColor: '#e6f4ea',
-                    isPortal: true
-                },
-                {
-                    name: 'Meine GGG',
-                    url: 'https://meine-ggg.de',
-                    description: 'Chemnitz GGG საცხოვრებელი ბინის მართვისა და ხელშეკრულებების პორტალი.',
-                    logo: 'https://meine-ggg.de/assets/images/logo.svg',
-                    bgColor: '#fef3c7',
-                    isPortal: true
-                },
-                {
-                    name: 'Deutsche Bank',
-                    url: 'https://meine.deutsche-bank.de',
-                    description: 'ონლაინ ბანკინგი, ფინანსების კონტროლი და საბანკო გადარიცხვები.',
-                    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Deutsche_Bank_logo_without_wordmark.svg/1200px-Deutsche_Bank_logo_without_wordmark.svg.png',
-                    bgColor: '#e0e7ff',
-                    isPortal: true
-                }
-            ];
-
-            const websitesRef = window.ref(window.db, DB_PATH);
-            for (const item of defaults) {
-                await window.push(websitesRef, item);
-            }
-        }
-        // ავტორიზაცია
         function showProtectedContent() {
             loginWrapper.style.display = 'none';
             particlesBg.classList.add('hidden');
@@ -1489,7 +1440,6 @@
             protectedContent.style.display = 'none';
             usernameInput.value = 'alex';
             passwordInput.value = '';
-            // ველოდებით კონტეინერის გამოჩენას და ვრთავთ Particles.js-ს
             setTimeout(() => {
                 initParticles();
                 window.dispatchEvent(new Event('resize'));
